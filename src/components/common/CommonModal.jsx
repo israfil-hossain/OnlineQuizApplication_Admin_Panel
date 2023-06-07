@@ -1,14 +1,9 @@
 //External Import
 import React from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
-import AddCategoryModal from "../Category/AddCategory";
-// import PackageModal from "../package/PackageModal";
-// import UserModal from "../User/UserModal";
+
 
 const CommonModal = ({ selectedData,open,cid, onClose, typeData,onUpdate }) => {
-  console.log("====> ", cid); 
+  // console.log("====> ", cid); 
   return (
     <>
       {/* {(() => {

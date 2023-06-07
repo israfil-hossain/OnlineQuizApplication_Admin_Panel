@@ -40,7 +40,6 @@ const style = {
 };
 
 const AddStudy = ({ open, onClose, data, fetchData }) => {
-  console.log("Study Data is : ", data);
   const editorRef = useRef(null);
   const handleResetAndClose = (resetForm) => {
     fetchData();
@@ -58,14 +57,11 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      console.log("Form Values: ", values);
-      console.log("TEXT 01 : ", values.text1);
-
+     
       setIsLoading(true);
 
       const response = await StudyService.addStudy(values);
 
-      console.log("Response: ", response.data);
 
       if (response.status === 201) {
         toast.success("Question created successfully");
@@ -88,13 +84,9 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
   };
   const handleUpdate = async (values, { setSubmitting }) => {
     try {
-      console.log("Questions Values: ", values);
-
       setIsLoading(true);
 
       const response = await StudyService.updateStudy(data?._id, values);
-
-      console.log("Response: ", response);
 
       if (response.status === 200) {
         toast.success("Question updated successfully");

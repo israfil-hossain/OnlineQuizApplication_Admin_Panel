@@ -39,7 +39,6 @@ const Study = () => {
 
   const fetchData = async () => {
     const res = await StudyService.getStudy();
-    console.log("Sldier Data ==>", res.data);
     setData(res.data);
   };
   const handleSearchQueryChange = debounce((query) => {

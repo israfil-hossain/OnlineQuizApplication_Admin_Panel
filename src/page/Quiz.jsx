@@ -34,7 +34,6 @@ const Quiz = () => {
 
   const fetchData = async () => {
     const res = await QuizService.getQuiz();
-    console.log("Quiz Data ==>", res.data);
     setData(res.data);
   };
   const handleSearchQueryChange = debounce((query) => {

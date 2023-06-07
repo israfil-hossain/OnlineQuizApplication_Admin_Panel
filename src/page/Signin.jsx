@@ -21,12 +21,9 @@ const Signin = () => {
   };
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     setIsLoading(true);
-    console.log("object : >> ", values);
-    console.log("Submitted");
     AuthService.signin(values)
       .then((response) => {
         setIsLoading(false);
-        console.log(response);
 
         localStorage.setItem("token", `${response.data.token}`);
         localStorage.setItem("role", `${response.data.role}`);

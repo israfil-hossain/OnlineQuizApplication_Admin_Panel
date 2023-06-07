@@ -29,7 +29,6 @@ const ViewQuestions = ({ open, onClose, data, fetchData }) => {
   const handleResetAndClose = () => {
     onClose();
   };
-  console.log("Quiz Data is : ", data);
 
   return (
     <Modal

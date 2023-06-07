@@ -22,12 +22,11 @@ import ViewQuestions from "../Questions/ViewQuestions";
 import QuestionService from "../../service/QuestionService";
 
 const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
-  console.log("data ", data);
-  console.log("data type ", typeData);
+
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
   const [dataType, setDataType] = useState(null);
-  console.log("Datatype ", dataType);
+ 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 

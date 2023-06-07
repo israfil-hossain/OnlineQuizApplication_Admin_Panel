@@ -41,7 +41,6 @@ const AddSlider = ({ open, onClose, data, fetchData }) => {
 
   
   const handleSubmit = async (values, { setSubmitting }) => {
-     console.log("Values", values);
     try {
       setIsLoading(true);
       const formData = new FormData();
@@ -50,7 +49,6 @@ const AddSlider = ({ open, onClose, data, fetchData }) => {
       formData.append("link", values.link);
       formData.append("text", values.text);
       const response = await SliderService.addSlider(formData);
-      console.log(response);
       toast.success("Add Successfully");
       fetchData(); 
       onClose(); 
@@ -64,7 +62,6 @@ const AddSlider = ({ open, onClose, data, fetchData }) => {
   };
 
   const handleUpdate = async (values, { setSubmitting }) => {
-    console.log("Values", values);
    try {
      setIsLoading(true);
      const formData = new FormData();

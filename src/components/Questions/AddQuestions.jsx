@@ -40,7 +40,7 @@ const style = {
 };
 
 const AddQuestions = ({ open, onClose, data, fetchData }) => {
-  console.log("Question Data is : ", data);
+
   const handleResetAndClose = (resetForm) => {
     fetchData();
     onClose();
@@ -57,7 +57,6 @@ const AddQuestions = ({ open, onClose, data, fetchData }) => {
 
   const fetchQuiz = async () => {
     const res = await QuizService.getQuiz();
-    console.log("res :>> ", res);
     
     setAnswer(
       [
@@ -75,20 +74,18 @@ const AddQuestions = ({ open, onClose, data, fetchData }) => {
         quizid: quiz._id.toString(),
       }))
     );
-    console.log("activeCategories Data ==>", res);
   };
 
-  console.log("Quiz is ===>", category);
+ 
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      console.log("Form Values: ", values);
 
       setIsLoading(true);
 
       const response = await QuestionService.addQuestion(values);
 
-      console.log("Response: ", response.data);
+  
 
       if (response.status === 201) {
         toast.success("Question created successfully");
@@ -107,13 +104,10 @@ const AddQuestions = ({ open, onClose, data, fetchData }) => {
   };
   const handleUpdate = async (values, { setSubmitting }) => {
     try {
-      console.log("Questions Values: ", values);
 
       setIsLoading(true);
 
       const response = await QuestionService.updateQuestion(data?._id, values);
-
-      console.log("Response: ", response);
 
       if (response.status === 200) {
         toast.success("Question updated successfully");

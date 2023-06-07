@@ -42,7 +42,6 @@ const ViewResult = () => {
     fetchResult();
   }, [id]);
 
-  console.log("Result ==> : ", result);
 
   return (
     <div>

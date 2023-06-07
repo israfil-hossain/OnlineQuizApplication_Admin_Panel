@@ -29,7 +29,6 @@ const ViewStudy = ({ open, onClose, data, fetchData }) => {
   const handleResetAndClose = () => {
     onClose();
   };
-  console.log("Study Data is : ", data);
 
   return (
     <Modal

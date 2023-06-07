@@ -35,7 +35,6 @@ const Questions = () => {
 
   const fetchData = async () => {
     const res = await QuestionService.getQuestion();
-    console.log("Question Data ==>", res.data);
     setData(res.data);
   };
   const handleSearchQueryChange = debounce((query) => {

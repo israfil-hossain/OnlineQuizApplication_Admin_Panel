@@ -68,16 +68,13 @@ const AddQuiz = ({ open, onClose, data, fetchData }) => {
         label: category.cat_name,
       }))
     );
-    console.log("activeCategories Data ==>", activeCategories);
   };
 
   const handleSubmit = async (values, { setSubmitting,setErrors }) => {
-    console.log("Values", values);
     try {
       setIsLoading(true);
      
       const response = await QuizService.addQuiz(values);
-      console.log("Quiz response = >", response);
       if (response.status === 201) {
         const responseData = response.data;
         if (responseData.error) {
@@ -122,12 +119,10 @@ const AddQuiz = ({ open, onClose, data, fetchData }) => {
 
 
   const handleUpdate = async (values, { setSubmitting,setErrors }) => {
-    console.log("Values", values);
     try {
       setIsLoading(true);
      
       const response = await QuizService.updateQuiz(data?._id, values);
-      console.log("Quiz response = >", response);
       if (response.status === 200) {
         const responseData = response.data;
         if (responseData.error) {
@@ -169,27 +164,6 @@ const AddQuiz = ({ open, onClose, data, fetchData }) => {
     setIsLoading(false);
     setSubmitting(false);
   };
-  // const handleUpdate = async (values, { setSubmitting, setErrors }) => {
-  //   console.log("Values", values);
-  //   try {
-  //     setIsLoading(true);
-  //     const value = {
-  //       ...values,
-  //       image: values.image,
-  //     }
-
-  //     const response = await QuizService.updateQuiz(data?._id, value);
-  //     console.log(response);
-  //     toast.success("Update Successfully");
-  //     fetchData();
-  //     onClose();
-  //   } catch (error) {
-  //     toast.error("Something went wrong uploading ");
-  //     console.log(error);
-  //   }
-  //   setIsLoading(false);
-  //   setSubmitting(false);
-  // };
 
   return (
     <Modal
