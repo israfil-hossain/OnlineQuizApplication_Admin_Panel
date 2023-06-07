@@ -308,26 +308,6 @@ const SliderTable = ({ id,columns, data, typeData, fetchData }) => {
             }
             break;
 
-          case "image":
-            if (dataType === "image_edit") {
-              return console.log("Click Image ");
-              // <AddSlider
-              //   data={selectedData}
-              //   fetchData={fetchData}
-              //   open={open}
-              //   onClose={handleClose}
-              // />
-            }
-            if (dataType === "image_view") {
-              return console.log("Click image view");
-              // <AddSlider
-              //   data={selectedData}
-              //   fetchData={fetchData}
-              //   open={open}
-              //   onClose={handleClose}
-              // />
-            }
-            break;
           default:
             return (
               <Box>

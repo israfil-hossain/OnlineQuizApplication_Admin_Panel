@@ -1,4 +1,6 @@
 import { MdEdit, MdVisibility, MdDelete } from "react-icons/md";
+import { useContext } from "react";
+
 import {
   Box,
   IconButton,
@@ -14,6 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import { toast } from "react-toastify";
 // import PackageService from "../../service/PackageService";
@@ -30,14 +33,14 @@ import StudyService from "../../service/StudyService";
 import AddStudy from "../Study/AddStudy";
 import ViewStudy from "../Study/ViewStudy";
 
-const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
+const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedData, setSelectedData] = useState(null);
   const [dataType, setDataType] = useState(null);
-
   // For View  Function ....
+  const navigate = useNavigate();
 
   const handleClick = (item) => {
     switch (typeData) {
@@ -68,6 +71,9 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
         setDataType("study_view");
         setOpen(true);
         setSelectedData(item);
+        break;
+      case "result":
+        navigate(`/results/viewresult/${item?._id}`);
         break;
       default:
         return "Not Found !";
@@ -130,7 +136,7 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
       }
     } catch (err) {}
   };
-  
+
   // Study Delete
   const handleStudyDelete = async (id) => {
     try {
@@ -233,21 +239,21 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
               >
                 {"ID"}
               </TableCell>
-              { haveimage === "true"  ? 
-              <TableCell
-                sx={{
-                  textAlign: "left",
-                 
-                  fontSize: "16px",
-                  fontWeight: "600",
-                }}
-              >
-                {"Image"}
-              </TableCell>
-              
-              : ""
-            }
-              
+              {haveimage === "true" ? (
+                <TableCell
+                  sx={{
+                    textAlign: "left",
+
+                    fontSize: "16px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {"Image"}
+                </TableCell>
+              ) : (
+                ""
+              )}
+
               {columns?.map((column) => (
                 <TableCell
                   key={column?.id}
@@ -292,31 +298,32 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
                       {index + 1}{" "}
                     </Typography>
                   </TableCell>
-                  { haveimage === "true"  ? 
-                  <TableCell sx={{}}>
-                    <Box
-                      sx={{
-                        width: "80px",
-                        height: "80px",
-                        overflow: "hidden",
-                        padding: "3px",
-                        background: "#f2f2f2",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <img
-                        src={item?.image ? item?.image : item?.profile} // Assuming image URL is stored in the "image" property of the data object
-                        alt=""
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "contain",
-                        }} // Adjust styles as needed
-                      />
-                    </Box>
-                  </TableCell>
-                  : "" 
-                  }
+                  {haveimage === "true" ? (
+                    <TableCell sx={{}}>
+                      <Box
+                        sx={{
+                          width: "80px",
+                          height: "80px",
+                          overflow: "hidden",
+                          padding: "3px",
+                          background: "#f2f2f2",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        <img
+                          src={item?.image ? item?.image : item?.profile} // Assuming image URL is stored in the "image" property of the data object
+                          alt=""
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain",
+                          }} // Adjust styles as needed
+                        />
+                      </Box>
+                    </TableCell>
+                  ) : (
+                    ""
+                  )}
 
                   {columns?.map((column) => (
                     <TableCell
@@ -327,11 +334,16 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
                     >
                       <Typography
                         sx={
-                          column.id === "quiz_status" || column.id === "cat_status" || column.id === "status" || column.id ==="usertype" || column.id ==="accessibility"
+                          column.id === "quiz_status" ||
+                          column.id === "cat_status" ||
+                          column.id === "status" ||
+                          column.id === "usertype" ||
+                          column.id === "accessibility"
                             ? {
                                 fontSize: "13px",
                                 backgroundColor:
-                                  item[column.id] === "active" || item[column.id] ==="paid"
+                                  item[column.id] === "active" ||
+                                  item[column.id] === "paid"
                                     ? "green"
                                     : "red",
                                 color: "white",
@@ -339,9 +351,9 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
                                 textAlign: "center",
                                 justifyContent: "left",
                                 alignItems: "left",
-                                paddingX:"2px",
-                                paddingY:"2px",
-                                width:"100px",
+                                paddingX: "2px",
+                                paddingY: "2px",
+                                width: "100px",
                                 boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
                               }
                             : {
@@ -359,7 +371,7 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
                   {typeData === "activity" ? (
                     ""
                   ) : (
-                    <TableCell sx={{width:"200px"}}>
+                    <TableCell sx={{ width: "200px" }}>
                       <Stack
                         direction="row"
                         spacing={0}
@@ -376,18 +388,25 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
                           >
                             <MdVisibility style={{ color: "green" }} />
                           </IconButton>
-                          <IconButton
-                            aria-label="edit"
-                            onClick={() => handleEdit(item)}
-                          >
-                            <MdEdit style={{ color: "blue" }} />
-                          </IconButton>
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() => handleDelete(item?._id)}
-                          >
-                            <MdDelete style={{ color: "red" }} />
-                          </IconButton>
+                          {typeData === "result" ? (
+                            ""
+                          ) : (
+                            <>
+                              {" "}
+                              <IconButton
+                                aria-label="edit"
+                                onClick={() => handleEdit(item)}
+                              >
+                                <MdEdit style={{ color: "blue" }} />
+                              </IconButton>
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() => handleDelete(item?._id)}
+                              >
+                                <MdDelete style={{ color: "red" }} />
+                              </IconButton>
+                            </>
+                          )}
                         </div>
                       </Stack>
                     </TableCell>
@@ -478,28 +497,28 @@ const CommonTable = ({ columns, data, typeData, fetchData, id,haveimage}) => {
               );
             }
             break;
-            case "study":
-              if (dataType === "study_edit") {
-                return (
-                  <AddStudy
-                    data={selectedData}
-                    fetchData={fetchData}
-                    open={open}
-                    onClose={handleClose}
-                  />
-                );
-              }
-              if (dataType === "study_view") {
-                return (
-                  <ViewStudy
-                    data={selectedData}
-                    fetchData={fetchData}
-                    open={open}
-                    onClose={handleClose}
-                  />
-                );
-              }
-              break;
+          case "study":
+            if (dataType === "study_edit") {
+              return (
+                <AddStudy
+                  data={selectedData}
+                  fetchData={fetchData}
+                  open={open}
+                  onClose={handleClose}
+                />
+              );
+            }
+            if (dataType === "study_view") {
+              return (
+                <ViewStudy
+                  data={selectedData}
+                  fetchData={fetchData}
+                  open={open}
+                  onClose={handleClose}
+                />
+              );
+            }
+            break;
           default:
             return "";
         }

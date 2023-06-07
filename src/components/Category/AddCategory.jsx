@@ -172,7 +172,7 @@ const AddCategoryModal = ({ open, onClose, data, fetchData }) => {
               handleBlur
             }) => (
               <Form>
-                <>{JSON.stringify(values)}</>
+                {/* <>{JSON.stringify(values)}</> */}
                 <Box
                   sx={{
                     pb: 2,

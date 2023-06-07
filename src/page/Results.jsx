@@ -9,18 +9,14 @@ import { debounce } from "lodash";
 //Internal Import
 import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 import CustomSearchField from "../components/common/SearchField";
-import PackageButton from "../components/common/PackageButton";
 import { MdSaveAlt } from "react-icons/md";
 
 
 import { BsSliders } from "react-icons/bs";
-import ImageTable from "../components/common/ImageTable";
 
 import jsPDF from 'jspdf'
 import 'jspdf-autotable';
 
-
-import ImageService from "../service/ImageService";
 
 import csvImageheaders from "../constants/imageHeaders";
 import resultHeader from "../constants/resultHeaders";
@@ -49,13 +45,10 @@ const Results = () => {
   result.quizName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const [open,setOpen] = useState(false);
-  const handleOpen=()=>setOpen(true);
-  const handleClose = ()=>setOpen(false);
 
   const handleDownloadPDF = ()=>{
     const pdf = new jsPDF(); 
-    pdf.autoTable({html:'#imagedata'});
+    pdf.autoTable({html:'#resultdata'});
     pdf.save("imageData.pdf")
   }
   return (
@@ -65,7 +58,7 @@ const Results = () => {
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
               <BsSliders size={23} className="min-w-max text-gray-500" />
-              &nbsp; Slider
+              &nbsp; Result
             </Box>
           </Link>
           {/* <Typography color="grey">sdfgh</Typography> */}

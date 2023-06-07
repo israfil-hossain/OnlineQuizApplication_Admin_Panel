@@ -12,13 +12,13 @@ const sliderHeader = [
     },
     {
         id:"link",
-        label:"Link",
-        color:"blue",
+        label:"Description",
+        color:"green",
     },
     {
         id:"text",
-        label:"Description",
-        color:"",
+        label:"Link",
+        color:"blue",
     },
 ]
 

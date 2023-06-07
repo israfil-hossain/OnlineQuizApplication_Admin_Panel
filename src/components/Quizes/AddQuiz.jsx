@@ -231,7 +231,7 @@ const AddQuiz = ({ open, onClose, data, fetchData }) => {
               resetForm,
             }) => (
               <Form>
-                <>{JSON.stringify(values)}</>
+                {/* <>{JSON.stringify(values)}</> */}
                 <Box
                   sx={{
                     pb: 0,

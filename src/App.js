@@ -12,6 +12,7 @@ import Results from "./page/Results";
 import Study from "./page/Study";
 import Slider from "./page/Slider";
 import Questions from "./page/Questions";
+import ViewResult from "./components/Result/ViewResult";
 
 
 
@@ -45,6 +46,7 @@ const App = () => {
 
          {/* Results */}
          <Route path="/results" element={<ProtectedRoute><Results /></ProtectedRoute>} />
+         <Route path="/results/viewresult/:id" element={<ProtectedRoute><ViewResult /></ProtectedRoute>} />
         
 
         {/* Users */}
