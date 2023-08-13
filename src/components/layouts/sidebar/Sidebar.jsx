@@ -3,33 +3,19 @@ import { useRef } from "react";
 
 import { motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
-import { Link, NavLink, useLocation,} from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { MenuContext } from "../../../context/MenuContext";
 
 // * React icons
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { AiFillTrophy, AiOutlineAppstore } from "react-icons/ai";
-import { BsPerson,BsSliders,BsFillImageFill, BsQuestionDiamondFill } from "react-icons/bs";
+import { BsPerson, BsQuestionDiamondFill } from "react-icons/bs";
 import { BiCategoryAlt } from "react-icons/bi";
 import { FiActivity, FiSliders } from "react-icons/fi";
-import {GiBlackBook} from "react-icons/gi";
+import { GiBlackBook } from "react-icons/gi";
 import logo from "../../../assets/mrcs.png";
-import logo2 from "../../../assets/logo2.png";
-import { MdOutlineQuiz } from "react-icons/md";
 
-
-// const subMenusList = [
-//   {
-//     name: "build",
-//     icon: RiBuilding3Line,
-//     menus: ["auth", "app settings", "Storage", "hosting"],
-//   },
-//   {
-//     name: "analytics",
-//     icon: TbReportAnalytics,
-//     menus: ["dashboard", "realtime", "events"],
-//   },
-// ];
+import { MdOutlineQuiz, MdSubscriptions } from "react-icons/md";
 
 const Sidebar = () => {
   let isTabletMid = useMediaQuery({ query: "(max-width: 768px)" });
@@ -82,7 +68,7 @@ const Sidebar = () => {
           },
         },
       };
-  
+
   return (
     <>
       <div
@@ -102,15 +88,13 @@ const Sidebar = () => {
        h-screen "
       >
         <Link to="/">
-        <div className="flex items-center gap-2.5 font-medium border-b py-3 border-slate-300  mx-3">
-          <img
-            src={logo}
-            width={45}
-            alt="logo"
-          />
-          <span className="text-3xl text-gray-50 font-sans font-bold ">MRCS</span>
-          {/* <span className="text-xl text-gray-200 whitespace-pre">PngCrown</span> */}
-        </div>
+          <div className="flex items-center gap-2.5 font-medium border-b py-3 border-slate-300  mx-3">
+            <img src={logo} width={45} alt="logo" />
+            <span className="text-3xl text-gray-50 font-sans font-bold ">
+              MRCS
+            </span>
+            {/* <span className="text-xl text-gray-200 whitespace-pre">PngCrown</span> */}
+          </div>
         </Link>
 
         <div className="flex flex-col  h-full">
@@ -124,31 +108,22 @@ const Sidebar = () => {
                 Dashboard
               </NavLink>
             </li>
-           
+
             <li>
               <NavLink to={"/category"} className="link text-gray-200">
-                <BiCategoryAlt
-                  size={23}
-                  className="min-w-max text-gray-200"
-                />
+                <BiCategoryAlt size={23} className="min-w-max text-gray-200" />
                 Category
               </NavLink>
             </li>
             <li>
               <NavLink to={"/slider"} className="link text-gray-200">
-                <FiSliders
-                  size={23}
-                  className="min-w-max text-gray-200"
-                />
+                <FiSliders size={23} className="min-w-max text-gray-200" />
                 Slider
               </NavLink>
             </li>
             <li>
               <NavLink to={"/quiz"} className="link text-gray-200">
-                <MdOutlineQuiz
-                  size={23}
-                  className="min-w-max text-gray-200"
-                />
+                <MdOutlineQuiz size={23} className="min-w-max text-gray-200" />
                 Quiz
               </NavLink>
             </li>
@@ -163,23 +138,17 @@ const Sidebar = () => {
             </li>
             <li>
               <NavLink to={"/study"} className="link text-gray-200">
-                <GiBlackBook
-                  size={23}
-                  className="min-w-max text-gray-200"
-                />
+                <GiBlackBook size={23} className="min-w-max text-gray-200" />
                 Study
               </NavLink>
             </li>
             <li>
               <NavLink to={"/results"} className="link text-gray-200">
-                <AiFillTrophy
-                  size={23}
-                  className="min-w-max text-gray-200"
-                />
+                <AiFillTrophy size={23} className="min-w-max text-gray-200" />
                 Result
               </NavLink>
             </li>
-            
+
             <li>
               <NavLink to={"/users"} className="link text-gray-200">
                 <BsPerson size={23} className="min-w-max text-gray-200" />
@@ -188,16 +157,20 @@ const Sidebar = () => {
             </li>
             <li>
               <NavLink to={"/activity"} className="link text-gray-200">
-                <FiActivity
-                  size={23}
-                  className="min-w-max text-gray-200"
-                />
+                <FiActivity size={23} className="min-w-max text-gray-200" />
                 User Activity
               </NavLink>
             </li>
-            
+            <li>
+              <NavLink to={"/subscription"} className="link text-gray-200">
+                <MdSubscriptions
+                  size={23}
+                  className="min-w-max text-gray-200"
+                />
+                Subscription Add
+              </NavLink>
+            </li>
           </ul>
-         
         </div>
         <motion.div
           onClick={() => {
@@ -220,7 +193,11 @@ const Sidebar = () => {
           transition={{ duration: 0 }}
           className="absolute text-gray-300 w-fit h-fit md:block z-50 hidden right-2 bottom-3 cursor-pointer"
         >
-          {isOpen ? <IoIosArrowBack size={25} /> : <IoIosArrowForward size={25} />}
+          {isOpen ? (
+            <IoIosArrowBack size={25} />
+          ) : (
+            <IoIosArrowForward size={25} />
+          )}
         </motion.div>
       </motion.div>
     </>

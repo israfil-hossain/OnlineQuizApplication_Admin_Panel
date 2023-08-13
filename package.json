@@ -1,5 +1,6 @@
 {
   "name": "mrcs",
+  "homepage":"https://admin.mrcsaid.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

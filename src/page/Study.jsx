@@ -14,12 +14,9 @@ import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 import CustomSearchField from "../components/common/SearchField";
 import PackageButton from "../components/common/PackageButton";
 import { MdSaveAlt } from "react-icons/md";
-import csvUserheaders from "../constants/csvUserheaders";
 
 import { BsSliders } from "react-icons/bs";
-import SliderService from "../service/SliderService";
-import AddSlider from "../components/Slider/AddSlider";
-import SliderTable from "../components/common/SliderTable";
+
 import csvSliderHeader from "../constants/csvSliderHeaders";
 import studyHeader from "../constants/studyHeaders";
 import StudyService from "../service/StudyService";
@@ -64,7 +61,7 @@ const Study = () => {
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
               <BsSliders size={23} className="min-w-max text-gray-500" />
-              &nbsp; Slider
+              &nbsp; Study
             </Box>
           </Link>
           {/* <Typography color="grey">sdfgh</Typography> */}

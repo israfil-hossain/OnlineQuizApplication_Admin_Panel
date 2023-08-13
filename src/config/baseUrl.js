@@ -4,8 +4,8 @@
 // };
 
 export const baseUrl = {
-    information: "http://localhost:5000/api",
-    file: "http://localhost:5000/api",
+    information: "https://mrcs-api.vercel.app/api",
+    file: "https://mrcs-api.vercel.app/api",
 };
 
 // mongoDb : mongodb+srv://pngcrown:pngcrown@cluster0.bdexcro.mongodb.net/pngCrown?retryWrites=true&w=majority

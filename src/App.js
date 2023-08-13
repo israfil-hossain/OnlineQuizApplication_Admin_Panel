@@ -13,6 +13,7 @@ import Study from "./page/Study";
 import Slider from "./page/Slider";
 import Questions from "./page/Questions";
 import ViewResult from "./components/Result/ViewResult";
+import Subscription from "./page/Subscription";
 
 
 
@@ -55,6 +56,9 @@ const App = () => {
  
         {/* Activity */}
         <Route path="/activity" element={<ProtectedRoute><Activity/></ProtectedRoute>} />
+
+        {/* Activity */}
+        <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
 
         {/* Quiz */}
         {/* <Route path="/quiz" element={<Quiz/>} /> */}
