@@ -319,12 +319,7 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
                     {/* Text 1  */}
                     <div className="my-4 rounded-md">
                       <div className="mb-4 items-center justify-center border px-4 py-2">
-                        {/* <label
-                          htmlFor="text1"
-                          className="block text-gray-800 mb-2"
-                        >
-                          Write Your Text Here
-                        </label> */}
+                        
                         <Field name="text1">
                           {({ field }) => (
                             <Editor

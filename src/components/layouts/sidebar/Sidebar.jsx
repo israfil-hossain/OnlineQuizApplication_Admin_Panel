@@ -97,7 +97,7 @@ const Sidebar = () => {
           </div>
         </Link>
 
-        <div className="flex flex-col  h-full">
+        <div className="flex flex-col  ">
           <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100   md:h-[68%] h-[70%]">
             <li>
               <NavLink to={"/"} className="link text-gray-200">
