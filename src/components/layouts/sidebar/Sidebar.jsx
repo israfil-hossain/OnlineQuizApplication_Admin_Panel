@@ -8,14 +8,13 @@ import { MenuContext } from "../../../context/MenuContext";
 
 // * React icons
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { AiFillTrophy, AiOutlineAppstore } from "react-icons/ai";
-import { BsPerson, BsQuestionDiamondFill } from "react-icons/bs";
+import { AiFillTrophy, AiOutlineAppstore, AiOutlineControl } from "react-icons/ai";
+import { BsPerson, BsQuestionDiamondFill, BsSliders } from "react-icons/bs";
 import { BiCategoryAlt } from "react-icons/bi";
-import { FiActivity, FiSliders } from "react-icons/fi";
 import { GiBlackBook } from "react-icons/gi";
 import logo from "../../../assets/mrcs.png";
-
 import { MdOutlineQuiz, MdSubscriptions } from "react-icons/md";
+import { FiActivity } from "react-icons/fi";
 
 const Sidebar = () => {
   let isTabletMid = useMediaQuery({ query: "(max-width: 768px)" });
@@ -116,8 +115,14 @@ const Sidebar = () => {
               </NavLink>
             </li>
             <li>
+              <NavLink to={"/controlpanel"} className="link text-gray-200">
+                <AiOutlineControl size={23} className="min-w-max text-gray-200" />
+                Control Panel
+              </NavLink>
+            </li>
+            <li>
               <NavLink to={"/slider"} className="link text-gray-200">
-                <FiSliders size={23} className="min-w-max text-gray-200" />
+                <BsSliders size={23} className="min-w-max text-gray-200" />
                 Slider
               </NavLink>
             </li>

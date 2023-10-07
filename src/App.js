@@ -4,6 +4,7 @@ import User from "./page/User";
 import Dashboard from "./page/Dashboard";
 import Activity from "./page/Activity";
 import Category from "./page/Category";
+import ControlPanel from "./page/ControlPanel"
 
 import Signin from "./page/Signin";
 import ProtectedRoute from "./components/protected/ProtectedRoute";
@@ -34,6 +35,9 @@ const App = () => {
 
         {/* Slider  */}
         <Route path="/slider" element={<ProtectedRoute><Slider /></ProtectedRoute>} />
+        
+        {/* ControlPanel  */}
+        <Route path="/controlpanel" element={<ProtectedRoute><ControlPanel /></ProtectedRoute>} />
 
 
         {/* Category */}
