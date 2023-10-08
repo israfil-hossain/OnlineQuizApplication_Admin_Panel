@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 // import PackageService from "../../service/PackageService";
@@ -32,6 +32,7 @@ import ViewQuiz from "../Quizes/ViewQuiz";
 import StudyService from "../../service/StudyService";
 import AddStudy from "../Study/AddStudy";
 import ViewStudy from "../Study/ViewStudy";
+import { deleteConfirmation } from "./deleteConfirmation";
 
 const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   const [open, setOpen] = useState(false);
@@ -83,11 +84,14 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   // For Category Deleted Function Call.....
   const handleCategoryDelete = async (id) => {
     try {
-      const response = await CategoryService.deleteCategory(id);
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
+        const response = await CategoryService.deleteCategory(id);
 
-      if (response.status === 200) {
-        toast.success("Category Deleted Successfully !");
-        fetchData();
+        if (response.status === 200) {
+          toast.success("Category Deleted Successfully !");
+          fetchData();
+        }
       }
     } catch (err) {
       toast.error("Something went wrong !");
@@ -98,11 +102,13 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   // For User Delete
   const handleUserDelete = async (id) => {
     try {
-      const response = await UserService.deleteUser(id);
-
-      if (response.status === 200) {
-        toast.success("User Deleted Successfully !");
-        fetchData();
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
+        const response = await UserService.deleteUser(id);
+        if (response.status === 200) {
+          toast.success("User Deleted Successfully !");
+          fetchData();
+        }
       }
     } catch (err) {
       toast.error("Something went wrong !");
@@ -113,11 +119,14 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   // For Activity Delete
   const handleActivityDelete = async (id) => {
     try {
-      const response = await UserService.deleteActivity(id);
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
+        const response = await UserService.deleteActivity(id);
 
-      if (response.status === 200) {
-        toast.success("User Activity Deleted Successfully !");
-        fetchData();
+        if (response.status === 200) {
+          toast.success("User Activity Deleted Successfully !");
+          fetchData();
+        }
       }
     } catch (err) {
       toast.error("Something went wrong !");
@@ -128,11 +137,14 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   // Quiz Delete
   const handleQuizDelete = async (id) => {
     try {
-      const response = await QuizService.deleteQuiz(id);
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
+        const response = await QuizService.deleteQuiz(id);
 
-      if (response.status === 200) {
-        toast.success("Quiz Deleted Successfully !");
-        fetchData();
+        if (response.status === 200) {
+          toast.success("Quiz Deleted Successfully !");
+          fetchData();
+        }
       }
     } catch (err) {}
   };
@@ -140,11 +152,14 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   // Study Delete
   const handleStudyDelete = async (id) => {
     try {
-      const response = await StudyService.deleteStudy(id);
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
+        const response = await StudyService.deleteStudy(id);
 
-      if (response.status === 200) {
-        toast.success("Study  Deleted Successfully !");
-        fetchData();
+        if (response.status === 200) {
+          toast.success("Study  Deleted Successfully !");
+          fetchData();
+        }
       }
     } catch (err) {}
   };

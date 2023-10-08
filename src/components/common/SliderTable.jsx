@@ -23,9 +23,9 @@ import SliderService from "../../service/SliderService";
 import ImageService from "../../service/ImageService";
 import AddSlider from "../Slider/AddSlider";
 import ViewSlider from "../Slider/ViewSlider";
+import { deleteConfirmation } from "./deleteConfirmation";
 
-const SliderTable = ({ id,columns, data, typeData, fetchData }) => {
-
+const SliderTable = ({ id, columns, data, typeData, fetchData }) => {
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
   const [dataType, setDataType] = useState(null);
@@ -53,11 +53,14 @@ const SliderTable = ({ id,columns, data, typeData, fetchData }) => {
   // For Slider Deleted Function Call.....
   const handleSliderDelete = async (id) => {
     try {
-      const response = await SliderService.deleteSlider(id);
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
+        const response = await SliderService.deleteSlider(id);
 
-      if (response.status === 200) {
-        toast.success("Slider Deleted Successfully !");
-        fetchData();
+        if (response.status === 200) {
+          toast.success("Slider Deleted Successfully !");
+          fetchData();
+        }
       }
     } catch (err) {
       toast.error("Something went wrong !");
@@ -68,11 +71,14 @@ const SliderTable = ({ id,columns, data, typeData, fetchData }) => {
   // For Image Deleted Function Call.....
   const handleImageDelete = async (id) => {
     try {
-      const response = await ImageService.deleteImage(id);
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
+        const response = await ImageService.deleteImage(id);
 
-      if (response.status === 200) {
-        toast.success("Slider Deleted Successfully !");
-        fetchData();
+        if (response.status === 200) {
+          toast.success("Slider Deleted Successfully !");
+          fetchData();
+        }
       }
     } catch (err) {
       toast.error("Something went wrong !");
@@ -103,7 +109,6 @@ const SliderTable = ({ id,columns, data, typeData, fetchData }) => {
         setSelectedData(item);
         break;
       case "slider":
-   
         setDataType("slider_edit");
         setOpen(true);
         setSelectedData(item);
@@ -213,7 +218,7 @@ const SliderTable = ({ id,columns, data, typeData, fetchData }) => {
                       {item?.status}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{width:"200px"}}>
+                  <TableCell sx={{ width: "200px" }}>
                     <Typography
                       sx={{
                         color: item?.status === "active" ? "green" : "red",
@@ -226,13 +231,10 @@ const SliderTable = ({ id,columns, data, typeData, fetchData }) => {
                     <TableCell sx={{}}>
                       <Typography
                         sx={{
-                          color: "blue" ,
+                          color: "blue",
                         }}
                       >
-                        <Link to={item.link}>
-                          {item?.link}
-                        </Link>
-                       
+                        <Link to={item.link}>{item?.link}</Link>
                       </Typography>
                     </TableCell>
                   ) : (
@@ -315,7 +317,6 @@ const SliderTable = ({ id,columns, data, typeData, fetchData }) => {
             );
         }
       })()}
-
     </>
   );
 };

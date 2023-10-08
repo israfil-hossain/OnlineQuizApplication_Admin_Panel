@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import AddQuestions from "../Questions/AddQuestions";
 import ViewQuestions from "../Questions/ViewQuestions";
 import QuestionService from "../../service/QuestionService";
+import { deleteConfirmation } from "./deleteConfirmation";
 
 const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
 
@@ -53,12 +54,15 @@ const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
   // For Image Deleted Function Call.....
   const handleQuestionDelete = async (id) => {
     try {
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
       const response = await QuestionService.deleteQuestion(id);
 
       if (response.status === 200) {
         toast.success("Question Deleted Successfully !");
         fetchData();
       }
+    }
     } catch (err) {
       toast.error("Something went wrong !");
       console.log(err);
