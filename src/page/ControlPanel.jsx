@@ -86,10 +86,10 @@ const ControlPanel = () => {
         justifyContent={"space-between"}
       >
         {/* Search Box  */}
-        <CustomSearchField
+        {/* <CustomSearchField
           name={"Search by title or subtitle"}
           // onChange={handleSearchQueryChange}
-        />
+        /> */}
         <Box
           sx={{
             display: "flex",
