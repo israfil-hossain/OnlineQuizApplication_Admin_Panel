@@ -25,13 +25,15 @@ const style = {
 };
 
 const AddCategoryModal = ({ open, onClose, data, fetchData }) => {
+  const [previewImage, setPreviewImage] = useState(data ? data.image : "");
   const handleResetAndClose = (resetForm) => {
     resetForm();
     fetchData();
     onClose();
+    setPreviewImage("");
   };
   const [isLoading, setIsLoading] = useState(false);
-  const [previewImage, setPreviewImage] = useState(data ? data.image : "");
+ 
   // Add Data
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {

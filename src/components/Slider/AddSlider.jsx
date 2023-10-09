@@ -30,14 +30,16 @@ const style = {
   p: 4,
 };
 const AddSlider = ({ open, onClose, data, fetchData }) => {
+  const [previewImage, setPreviewImage] = useState(data ? data.imageUrl : "");
   const handleResetAndClose = (resetForm) => {
     fetchData();
     onClose();
     resetForm();
+    setPreviewImage("");
   };
   const [isLoading, setIsLoading] = useState(false);
 
-  const [previewImage, setPreviewImage] = useState(data ? data.imageUrl : "");
+  
 
   
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -48,7 +50,7 @@ const AddSlider = ({ open, onClose, data, fetchData }) => {
       formData.append("status", values.status);
       formData.append("link", values.link);
       formData.append("text", values.text);
-      const response = await SliderService.addSlider(formData);
+      await SliderService.addSlider(formData);
       toast.success("Add Successfully");
       fetchData(); 
       onClose(); 

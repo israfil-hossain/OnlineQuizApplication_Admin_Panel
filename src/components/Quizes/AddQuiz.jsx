@@ -47,6 +47,7 @@ const AddQuiz = ({ open, onClose, data, fetchData }) => {
     fetchData();
     onClose();
     resetForm();
+    setPreviewImage("");
   };
   const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState();

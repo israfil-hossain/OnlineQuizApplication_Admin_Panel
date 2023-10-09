@@ -7,9 +7,9 @@ import { Box, Chip, Divider, IconButton, Switch } from "@mui/material";
 import { AiOutlineCloseCircle, AiOutlineCloudUpload } from "react-icons/ai";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import panelValidationSchema from "../../utils/validation/panelValidation";
-import CategoryService from "../../service/CategoryService";
 import { toast } from "react-toastify";
 import { Progress } from "../common/Progress";
+import ControlPanelService from "../../service/ControlPanelService";
 
 const style = {
   position: "absolute",
@@ -25,60 +25,86 @@ const style = {
 };
 
 const AddPanelModal = ({ open, onClose, data, fetchData }) => {
+  const [previewBanner, setPreviewBanner] = useState(data ? data.image : "");
   const handleResetAndClose = (resetForm) => {
-    resetForm();
     fetchData();
     onClose();
+    resetForm();
+    setPreviewBanner("")
   };
   const [isLoading, setIsLoading] = useState(false);
-  const [previewBanner, setPreviewBanner] = useState(data ? data.banner : "");
+  
   // Add Data
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+  // const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+  //   console.log("====>values", values);
+  //   try {
+  //     //api call
+  //     setIsLoading(true);
+  //     const response = await ControlPanelService.addControl(values);
+  //     // console.log("object :>> ", response);
+  //     console.log("Status Code : ", response.status);
+  //     if (response.status === 200) {
+  //       const responseData = response.data;
+  //       if (responseData.error) {
+  //         toast.error(responseData.error.message);
+  //         const errorData = responseData.error;
+  //         if (errorData.errors) {
+  //           const errors = Object.keys(errorData.errors).reduce((acc, key) => {
+  //             acc[key] = errorData.errors[key].msg;
+  //             return acc;
+  //           }, {});
+  //           console.log(errors);
+  //           setErrors(errors);
+  //         }
+  //       } else {
+  //         toast.success("Successfully Add Control Settings ");
+  //         onClose(true);
+  //         fetchData();
+  //       }
+  //       setSubmitting(false);
+  //     }
+  //   } catch (err) {
+  //     if (err.response) {
+  //       const errorData = err.response.data;
+  //       toast.error(errorData.message);
+  //       if (errorData.errors) {
+  //         const errors = Object.keys(errorData.errors).reduce((acc, key) => {
+  //           acc[key] = errorData.errors[key].msg;
+  //           return acc;
+  //         }, {});
+  //         console.log(errors);
+  //         setErrors(errors);
+  //       } else {
+  //         toast.error("Something went wrong");
+  //       }
+  //     } else {
+  //       toast.error("Something went wrong");
+  //     }
+  //   }
+  //   setIsLoading(false);
+  //   setSubmitting(false);
+  // };
+
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      //api call
       setIsLoading(true);
-      const response = await CategoryService.addCategory(values);
-      // console.log("object :>> ", response);
-      // console.log("Status Code : ", response.status);
-      if (response.status === 200) {
-        const responseData = response.data;
-        if (responseData.error) {
-          toast.error(responseData.error.message);
-          const errorData = responseData.error;
-          if (errorData.errors) {
-            const errors = Object.keys(errorData.errors).reduce((acc, key) => {
-              acc[key] = errorData.errors[key].msg;
-              return acc;
-            }, {});
-            console.log(errors);
-            setErrors(errors);
-          }
-        } else {
-          toast.success("Successfully Add Settings ");
-          onClose(true);
-          fetchData();
-        }
-        setSubmitting(false);
-      }
-    } catch (err) {
-      if (err.response) {
-        const errorData = err.response.data;
-        toast.error(errorData.message);
-        if (errorData.errors) {
-          const errors = Object.keys(errorData.errors).reduce((acc, key) => {
-            acc[key] = errorData.errors[key].msg;
-            return acc;
-          }, {});
-          console.log(errors);
-          setErrors(errors);
-        } else {
-          toast.error("Something went wrong");
-        }
-      } else {
-        toast.error("Something went wrong");
-      }
+      const formData = new FormData();
+      formData.append("image", values.image);
+      formData.append("status", values.status);
+      formData.append("link", values.link);
+      formData.append("title", values.title);
+      formData.append("subtitle", values.subtitle);
+      await ControlPanelService.addControl(formData);
+      toast.success("Add Successfully");
+      fetchData(); 
+      setPreviewBanner(null);
+      onClose(); 
+
+    } catch (error) {
+      toast.error("Something went wrong uploading "); 
+      console.log(error);
     }
-    setIsLoading(false);
+    setIsLoading(false); 
     setSubmitting(false);
   };
 
@@ -87,48 +113,23 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
     // console.log("Values ", values);
     try {
       setIsLoading(true);
-     
-      const response = await CategoryService.updateCategory(data?._id, values);
-      // console.log("Quiz response = >", response);
-      if (response.status === 201) {
-        const responseData = response.data;
-        if (responseData.error) {
-          toast.error(responseData.error.message);
-          const errorData = responseData.error;
-          if (errorData.errors) {
-            const errors = Object.keys(errorData.errors).reduce((acc, key) => {
-              acc[key] = errorData.errors[key].msg;
-              return acc;
-            }, {});
-            // console.log(errors);
-            setErrors(errors);
-          }
-        } else {
-          toast.success("Successfully Add Quiz ");
-          onClose(true);
-          fetchData();
-        }
-        setSubmitting(false);
-      }
-    } catch (err) {
-      if (err.response) {
-        const errorData = err.response.data;
-        toast.error(errorData.message);
-        if (errorData.errors) {
-          const errors = Object.keys(errorData.errors).reduce((acc, key) => {
-            acc[key] = errorData.errors[key].msg;
-            return acc;
-          }, {});
-          // console.log(errors);
-          setErrors(errors);
-        } else {
-          toast.error("Something went wrong");
-        }
-      } else {
-        toast.error("Something went wrong");
-      }
+      const formData = new FormData();
+      formData.append("image", values.image);
+      formData.append("status", values.status);
+      formData.append("link", values.link);
+      formData.append("title", values.title);
+      formData.append("subtitle", values.subtitle);
+      await ControlPanelService.updateControl(data?._id,formData);
+      toast.success("Update Successfully");
+      fetchData(); 
+      setPreviewBanner(null);
+      onClose(); 
+
+    } catch (error) {
+      toast.error("Something went wrong uploading "); 
+      console.log(error);
     }
-    setIsLoading(false);
+    setIsLoading(false); 
     setSubmitting(false);
   };
 
@@ -158,7 +159,7 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
               subtitle: data ? data.subtitle : "",
               link: data ? data.link :"",
               status: data ? data.status : "inactive",
-              banner: data ? data?.banner : "",
+              image: data ? data?.image : "",
 
             }}
             validationSchema={panelValidationSchema}
@@ -170,9 +171,10 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
               handleChange,
               errors,
               touched,
-              handleSubmit,
+              isSubmitting,
               setFieldValue,
-              handleBlur
+              handleBlur,
+             
             }) => (
               <Form>
                 {/* <>{JSON.stringify(values)}</> */}
@@ -221,22 +223,22 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
                         </div>
                       )}
                       <input
-                        id="banner"
-                        name="banner"
+                        id="image"
+                        name="image"
                         type="file"
                         onChange={(event) => {
-                          setFieldValue("banner", event.currentTarget.files[0]);
+                          setFieldValue("image", event.currentTarget.files[0]);
                           setPreviewBanner(
                             URL.createObjectURL(event.currentTarget.files[0])
                           );
                         }}
                         onBlur={handleBlur}
-                        className={touched.banner && errors.banner ? "error" : ""}
+                        className={touched.image && errors.image ? "error" : ""}
                       />
                     </div>
 
                     <ErrorMessage
-                      name="banner"
+                      name="image"
                       component="div"
                       className="error-message"
                     />
@@ -335,6 +337,7 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
                   </div>
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     {isLoading ? <Progress className="mr-2" /> : ""}

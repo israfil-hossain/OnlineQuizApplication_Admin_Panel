@@ -51,7 +51,7 @@ const ViewPanelModal = ({ open, onClose, data, fetchData }) => {
             }}
           >
             <Typography variant="h5" component="h5">
-              View Panel
+              View Control Panel
             </Typography>
             <div>
               <IconButton
@@ -71,7 +71,7 @@ const ViewPanelModal = ({ open, onClose, data, fetchData }) => {
           <div className="space-y-6 mx-auto max-w-md">
             <div className="block text-sm font-medium text-gray-700">
               <span className="text-xl pr-5 ">Panel :</span>
-              <span className="text-xl text-blue-500">{data?.cat_name}</span>
+              <span className="text-xl text-blue-500">{data?.title}</span>
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-xl pr-5 ">Status :</span>

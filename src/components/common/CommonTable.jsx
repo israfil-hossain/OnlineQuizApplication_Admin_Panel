@@ -33,6 +33,9 @@ import StudyService from "../../service/StudyService";
 import AddStudy from "../Study/AddStudy";
 import ViewStudy from "../Study/ViewStudy";
 import { deleteConfirmation } from "./deleteConfirmation";
+import ControlPanelService from "../../service/ControlPanelService";
+import ViewPanelModal from "../controlpanel/ViewPanel";
+import AddPanelModal from "../controlpanel/AddPanel";
 
 const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   const [open, setOpen] = useState(false);
@@ -42,44 +45,6 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   const [dataType, setDataType] = useState(null);
   // For View  Function ....
   const navigate = useNavigate();
-
-  const handleClick = (item) => {
-    switch (typeData) {
-      case "user":
-        setDataType("user_view");
-        setOpen(true);
-        setSelectedData(item);
-        // return navigate(`/package/edit/${item}`);
-        break;
-      case "activity":
-        setDataType("act_view");
-        setOpen(true);
-        setSelectedData(item);
-        break;
-
-      case "category":
-        setDataType("cat_view");
-        setOpen(true);
-        setSelectedData(item);
-        break;
-
-      case "quiz":
-        setDataType("quiz_view");
-        setOpen(true);
-        setSelectedData(item);
-        break;
-      case "study":
-        setDataType("study_view");
-        setOpen(true);
-        setSelectedData(item);
-        break;
-      case "result":
-        navigate(`/results/viewresult/${item?._id}`);
-        break;
-      default:
-        return "Not Found !";
-    }
-  };
 
   // For Category Deleted Function Call.....
   const handleCategoryDelete = async (id) => {
@@ -146,7 +111,10 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
           fetchData();
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      toast.error("Something went wrong !");
+      console.log("err=>", err);
+    }
   };
 
   // Study Delete
@@ -161,9 +129,72 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
           fetchData();
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      toast.error("Something went wrong !");
+      console.log("err=>", err);
+    }
   };
 
+  // ControlPanel Delete
+  const handleControlDelete = async (id) => {
+    try {
+      const result = await deleteConfirmation();
+      if (result.isConfirmed) {
+        const response = await ControlPanelService.deleteControl(id);
+
+        if (response.status === 200) {
+          toast.success("Control Settings Deleted Successfully !");
+          fetchData();
+        }
+      }
+    } catch (err) {
+      toast.error("Something went wrong !");
+      console.log(err);
+    }
+  };
+  // Global View for ALL Table
+  const handleClick = (item) => {
+    switch (typeData) {
+      case "user":
+        setDataType("user_view");
+        setOpen(true);
+        setSelectedData(item);
+        // return navigate(`/package/edit/${item}`);
+        break;
+      case "activity":
+        setDataType("act_view");
+        setOpen(true);
+        setSelectedData(item);
+        break;
+
+      case "category":
+        setDataType("cat_view");
+        setOpen(true);
+        setSelectedData(item);
+        break;
+
+      case "quiz":
+        setDataType("quiz_view");
+        setOpen(true);
+        setSelectedData(item);
+        break;
+      case "control":
+        setDataType("control_view");
+        setOpen(true);
+        setSelectedData(item);
+        break;
+      case "study":
+        setDataType("study_view");
+        setOpen(true);
+        setSelectedData(item);
+        break;
+      case "result":
+        navigate(`/results/viewresult/${item?._id}`);
+        break;
+      default:
+        return "Not Found !";
+    }
+  };
   // Global HandleDelete For Any Tables
   const handleDelete = async (id) => {
     switch (typeData) {
@@ -179,6 +210,9 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
       case "quiz":
         handleQuizDelete(id);
         break;
+      case "control":
+        handleControlDelete(id);
+        break;
       case "study":
         handleStudyDelete(id);
         break;
@@ -192,6 +226,7 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
     setOpen(false);
   };
 
+  // Global HandleEdit For ANY Tables
   const handleEdit = (item) => {
     switch (typeData) {
       case "user":
@@ -205,7 +240,11 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
         setOpen(true);
         setSelectedData(item);
         break;
-
+      case "control":
+        setDataType("control_edit");
+        setOpen(true);
+        setSelectedData(item);
+        break;
       case "category":
         setDataType("cat_edit");
         setOpen(true);
@@ -526,6 +565,28 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
             if (dataType === "study_view") {
               return (
                 <ViewStudy
+                  data={selectedData}
+                  fetchData={fetchData}
+                  open={open}
+                  onClose={handleClose}
+                />
+              );
+            }
+            break;
+          case "control":
+            if (dataType === "control_edit") {
+              return (
+                <AddPanelModal
+                  data={selectedData}
+                  fetchData={fetchData}
+                  open={open}
+                  onClose={handleClose}
+                />
+              );
+            }
+            if (dataType === "control_view") {
+              return (
+                <ViewPanelModal
                   data={selectedData}
                   fetchData={fetchData}
                   open={open}

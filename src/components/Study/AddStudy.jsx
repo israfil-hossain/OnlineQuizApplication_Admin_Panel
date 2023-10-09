@@ -41,13 +41,15 @@ const style = {
 
 const AddStudy = ({ open, onClose, data, fetchData }) => {
   const editorRef = useRef(null);
+  const [previewImage, setPreviewImage] = useState(data ? data?.image : "");
   const handleResetAndClose = (resetForm) => {
     fetchData();
     onClose();
     resetForm();
+    setPreviewImage("");
   };
   const [isLoading, setIsLoading] = useState(false);
-  const [previewImage, setPreviewImage] = useState(data ? data?.image : "");
+  
 
   // const log = () => {
   //   if (editorRef.current) {

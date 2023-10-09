@@ -40,16 +40,17 @@ const style = {
 };
 
 const AddQuestions = ({ open, onClose, data, fetchData }) => {
-
+  const [previewImage, setPreviewImage] = useState(data ? data?.image : "");
   const handleResetAndClose = (resetForm) => {
     fetchData();
     onClose();
     resetForm();
+    setPreviewImage("");
   };
   const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState();
   const [answer, setAnswer] = useState();
-  const [previewImage, setPreviewImage] = useState(data ? data?.image : "");
+  
 
   useEffect(() => {
     fetchQuiz();

@@ -22,10 +22,10 @@ import CustomSearchField from "../components/common/SearchField";
 import PackageButton from "../components/common/PackageButton";
 import { MdSaveAlt } from "react-icons/md";
 
-import CategoryService from "../service/CategoryService";
 import csvCategoryheaders from "../constants/categoryHeaders";
 import AddPanelModal from "../components/controlpanel/AddPanel";
 import controlHeader from "../constants/controlpanel";
+import ControlPanelService from "../service/ControlPanelService";
 
 const ControlPanel = () => {
   const [data, setData] = useState([]);
@@ -38,18 +38,18 @@ const ControlPanel = () => {
   }, []);
 
   const fetchData = async () => {
-    const res = await CategoryService.getCategory();
-    setData(res.data);
+    const res = await ControlPanelService.getControl();
+    console.log("Response", res.data);
+    setData(res?.data);
   };
-  const handleSearchQueryChange = debounce((query) => {
-    setSearchQuery(query);
-  }, 500);
+  // const handleSearchQueryChange = debounce((query) => {
+  //   setSearchQuery(query);
+  // }, 500);
 
-  const filteredData = data.filter(
-    (user) =>
-      user.cat_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.cat_status.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredData = data?.filter(
+  //   (control) =>
+  //   control.title.toLowerCase() 
+  // );
   const [open, setOpen] = React.useState(false);
   
   const handleOpen = () => setOpen(true);
@@ -57,8 +57,8 @@ const ControlPanel = () => {
  
   const handleDownloadPDF = ()=>{
     const pdf = new jsPDF(); 
-    pdf.autoTable({html:'#category'});
-    pdf.save("Category.pdf")
+    pdf.autoTable({html:'#HomeSettings'});
+    pdf.save("HomeSettings.pdf")
   }
   return (
     <div>
@@ -87,8 +87,8 @@ const ControlPanel = () => {
       >
         {/* Search Box  */}
         <CustomSearchField
-          name={"Search by Username or Email"}
-          onChange={handleSearchQueryChange}
+          name={"Search by title or subtitle"}
+          // onChange={handleSearchQueryChange}
         />
         <Box
           sx={{
@@ -101,7 +101,7 @@ const ControlPanel = () => {
          <CSVLink
             data={data}
             headers={csvCategoryheaders}
-            filename="Category.csv"
+            filename="Control.csv"
           >
             <LoadingButton
               sx={{
@@ -146,6 +146,7 @@ const ControlPanel = () => {
             </LoadingButton>
          </Box>
           {/* Add Button  */}
+          {data?.some(item => item.status > 1) ? null : (
           <Box
             sx={{
               alignContent: "right",
@@ -160,14 +161,29 @@ const ControlPanel = () => {
               variant={"contained"}
             />
           </Box>
+        )}
+          {/* <Box
+            sx={{
+              alignContent: "right",
+              textAlign: "right",
+              marginBottom: "10px",
+            }}
+            onClick={handleOpen}
+          >
+            <PackageButton
+              color={"green"}
+              text={"+ Add"}
+              variant={"contained"}
+            />
+          </Box> */}
         </Box>
       </Stack>
       <div className="pt-5">
         <CommonTable
-          id={"category"}
+          id={"control"}
           columns={controlHeader}
-          data={filteredData}
-          typeData={"category"}
+          data={data}
+          typeData={"control"}
           fetchData={fetchData}
           haveimage={"true"}
         />
