@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 import { Box, Breadcrumbs } from "@mui/material";
 import { Link } from "react-router-dom";
-import { BsSliders } from "react-icons/bs";
 import { CommonProgress } from "../components/common/CommonProgress";
 import SubscriptionService from "../service/SubscriptionService";
 import { toast } from "react-toastify";
 
 import CommonEditor from "../components/common/CommonEditor";
+import { MdSubscriptions } from "react-icons/md";
 
 const Subscription = () => {
   const [isloading, setIsLoading] = useState(false);
@@ -69,7 +69,7 @@ const Subscription = () => {
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
-              <BsSliders size={23} className="min-w-max text-gray-500" />
+              <MdSubscriptions size={23} className="min-w-max text-gray-500" />
               &nbsp; Subscription
             </Box>
           </Link>

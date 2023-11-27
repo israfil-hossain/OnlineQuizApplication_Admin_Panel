@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Breadcrumbs, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import { AiOutlineAppstore } from "react-icons/ai";
 import { LoadingButton } from "@mui/lab";
 import { CSVLink } from "react-csv";
 import { debounce } from "lodash";
@@ -19,6 +18,7 @@ import AddUser from "../components/Users/AddUser";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CommonProgress } from "../components/common/CommonProgress";
+import { BsPerson } from "react-icons/bs";
 const User = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,7 +60,7 @@ const User = () => {
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
-              <AiOutlineAppstore
+              <BsPerson
                 size={23}
                 className="min-w-max text-gray-500"
               />

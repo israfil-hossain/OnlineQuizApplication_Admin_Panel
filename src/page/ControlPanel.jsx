@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Breadcrumbs, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import { AiOutlineAppstore } from "react-icons/ai";
+import {  AiOutlineControl } from "react-icons/ai";
 import { LoadingButton } from "@mui/lab";
 import { CSVLink } from "react-csv";
 
@@ -54,7 +54,7 @@ const ControlPanel = () => {
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
-              <AiOutlineAppstore
+              <AiOutlineControl
                 size={23}
                 className="min-w-max text-gray-500"
               />

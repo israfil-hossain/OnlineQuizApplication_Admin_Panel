@@ -15,7 +15,6 @@ import CustomSearchField from "../components/common/SearchField";
 import PackageButton from "../components/common/PackageButton";
 import { MdSaveAlt } from "react-icons/md";
 
-import { BsSliders } from "react-icons/bs";
 
 import csvSliderHeader from "../constants/csvSliderHeaders";
 import studyHeader from "../constants/studyHeaders";
@@ -23,6 +22,7 @@ import StudyService from "../service/StudyService";
 import CommonTable from "../components/common/CommonTable";
 import AddStudy from "../components/Study/AddStudy";
 import { CommonProgress } from "../components/common/CommonProgress";
+import { GiBlackBook } from "react-icons/gi";
 
 const Study = () => {
   const [data, setData] = useState([]);
@@ -64,7 +64,7 @@ const Study = () => {
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
-              <BsSliders size={23} className="min-w-max text-gray-500" />
+              <GiBlackBook size={23} className="min-w-max text-gray-500" />
               &nbsp; Study
             </Box>
           </Link>

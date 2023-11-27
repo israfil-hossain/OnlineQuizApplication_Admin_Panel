@@ -11,8 +11,6 @@ import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 import CustomSearchField from "../components/common/SearchField";
 import { MdSaveAlt } from "react-icons/md";
 
-import { BsSliders } from "react-icons/bs";
-
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
@@ -21,6 +19,7 @@ import resultHeader from "../constants/resultHeaders";
 import QuestionService from "../service/QuestionService";
 import CommonTable from "../components/common/CommonTable";
 import { CommonProgress } from "../components/common/CommonProgress";
+import { AiFillTrophy } from "react-icons/ai";
 
 const Results = () => {
   const [data, setData] = useState([]);
@@ -57,7 +56,7 @@ const Results = () => {
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
-              <BsSliders size={23} className="min-w-max text-gray-500" />
+              <AiFillTrophy size={23} className="min-w-max text-gray-500" />
               &nbsp; Result
             </Box>
           </Link>

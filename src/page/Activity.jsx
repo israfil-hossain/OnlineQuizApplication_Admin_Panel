@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Breadcrumbs, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import { AiOutlineAppstore } from "react-icons/ai";
 import { LoadingButton } from "@mui/lab";
 import { CSVLink } from "react-csv";
 import { debounce } from "lodash";
@@ -18,6 +17,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import csvUserActivityHeader from "../constants/csvUserActivity";
 import { CommonProgress } from "../components/common/CommonProgress";
+import { FiActivity } from "react-icons/fi";
 
 const Activity = () => {
   const [data, setData] = useState([]);
@@ -54,7 +54,7 @@ const Activity = () => {
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
-              <AiOutlineAppstore
+              <FiActivity
                 size={23}
                 className="min-w-max text-gray-500"
               />

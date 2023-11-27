@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Breadcrumbs, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import { AiOutlineAppstore } from "react-icons/ai";
 import { LoadingButton } from "@mui/lab";
 import { CSVLink } from "react-csv";
 import { debounce } from "lodash";
@@ -22,6 +21,7 @@ import CategoryService from "../service/CategoryService";
 import csvCategoryheaders from "../constants/categoryHeaders";
 import AddCategoryModal from "../components/Category/AddCategory";
 import { CommonProgress } from "../components/common/CommonProgress";
+import { BiCategoryAlt } from "react-icons/bi";
 
 const Category = () => {
   const [data, setData] = useState([]);
@@ -65,7 +65,7 @@ const Category = () => {
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
-              <AiOutlineAppstore
+              <BiCategoryAlt
                 size={23}
                 className="min-w-max text-gray-500"
               />
