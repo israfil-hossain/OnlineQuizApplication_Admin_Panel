@@ -28,20 +28,20 @@ const Signin = () => {
           localStorage.setItem("token", `${response.data.token}`);
           localStorage.setItem("role", `${response.data.role}`);
           localStorage.setItem("email", `${response.data.email}`);
-          // const user = response.data.username;
-          // dispatch({ type: "LOGIN", payload: user});
           toast.success("Successfully login");
           setSubmitting(false);
 
           navigate("/");
         } else {
           toast.error("Somethign is wrong");
+          setSubmitting(false);
         }
       })
 
       .catch((err) => {
         toast.error("Something is Wrong,");
         console.log("Err => ", err);
+        setSubmitting(false);
       });
   };
 

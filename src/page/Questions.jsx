@@ -12,21 +12,23 @@ import CustomSearchField from "../components/common/SearchField";
 import PackageButton from "../components/common/PackageButton";
 import { MdSaveAlt } from "react-icons/md";
 
-import { BsFillPatchQuestionFill, BsSliders } from "react-icons/bs";
+import { BsFillPatchQuestionFill } from "react-icons/bs";
 import ImageTable from "../components/common/ImageTable";
 
-import jsPDF from 'jspdf'
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 import csvImageheaders from "../constants/imageHeaders";
 import AddQuestions from "../components/Questions/AddQuestions";
 import questionHeader from "../constants/questionHeader";
 import QuestionService from "../service/QuestionService";
+import { CommonProgress } from "../components/common/CommonProgress";
 
 const Questions = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleClick = () => {};
   // Fetch User Data
   useEffect(() => {
@@ -34,34 +36,40 @@ const Questions = () => {
   }, []);
 
   const fetchData = async () => {
+    setIsLoading(true);
     const res = await QuestionService.getQuestion();
     setData(res.data);
+    setIsLoading(false);
   };
   const handleSearchQueryChange = debounce((query) => {
     setSearchQuery(query);
   }, 500);
 
-  const filteredData = data.filter((question) =>
-    question.quizname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    question.question_name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = data.filter(
+    (question) =>
+      question.quizname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      question.question_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const [open,setOpen] = useState(false);
-  const handleOpen=()=>setOpen(true);
-  const handleClose = ()=>setOpen(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  const handleDownloadPDF = ()=>{
-    const pdf = new jsPDF(); 
-    pdf.autoTable({html:'#imagedata'});
-    pdf.save("imageData.pdf")
-  }
+  const handleDownloadPDF = () => {
+    const pdf = new jsPDF();
+    pdf.autoTable({ html: "#imagedata" });
+    pdf.save("imageData.pdf");
+  };
   return (
     <div>
       <PackageBreadcrumb>
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="grey" href="/">
             <Box sx={{ justifyContent: "center", display: "flex" }}>
-              <BsFillPatchQuestionFill size={23} className="min-w-max text-gray-500" />
+              <BsFillPatchQuestionFill
+                size={23}
+                className="min-w-max text-gray-500"
+              />
               &nbsp; Questions
             </Box>
           </Link>
@@ -89,35 +97,39 @@ const Questions = () => {
             justifyContent: "space-between",
           }}
         >
-         <Box>
-         <CSVLink data={data} headers={csvImageheaders} filename="Imagedata.csv">
+          <Box>
+            <CSVLink
+              data={data}
+              headers={csvImageheaders}
+              filename="Imagedata.csv"
+            >
+              <LoadingButton
+                sx={{
+                  height: "30px",
+                  width: "75px",
+                  mt: { lg: "6px", md: "6px" },
+                  ml: { lg: "10px", md: "6px" },
+                  alignContent: "left",
+                  textAlign: "left",
+                }}
+                size="small"
+                color="secondary"
+                onClick={handleClick}
+                // loading={loading}
+                loadingPosition="start"
+                startIcon={<MdSaveAlt size={25} />}
+                variant="contained"
+                disabled={data ? false : true}
+              >
+                <span>csv</span>
+              </LoadingButton>
+            </CSVLink>
             <LoadingButton
               sx={{
                 height: "30px",
                 width: "75px",
                 mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px" },
-                alignContent: "left",
-                textAlign: "left",
-              }}
-              size="small"
-              color="secondary"
-              onClick={handleClick}
-              // loading={loading}
-              loadingPosition="start"
-              startIcon={<MdSaveAlt size={25} />}
-              variant="contained"
-              disabled={data ? false : true}
-            >
-              <span>csv</span>
-            </LoadingButton>
-          </CSVLink>
-          <LoadingButton
-              sx={{
-                height: "30px",
-                width: "75px",
-                mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px",sm:"4px" },
+                ml: { lg: "10px", md: "6px", sm: "4px" },
                 alignContent: "left",
                 textAlign: "left",
               }}
@@ -132,7 +144,7 @@ const Questions = () => {
             >
               <span>pdf</span>
             </LoadingButton>
-         </Box>
+          </Box>
           {/* Add Button  */}
           <Box
             sx={{
@@ -150,18 +162,22 @@ const Questions = () => {
           </Box>
         </Box>
       </Stack>
-      <div className="pt-5">
-        {/* <CommonTable   columns={userHeader} data={filteredData} typeData={"user"} onDeleted={fetchData}/> */}
-        <ImageTable
-          id={"imagedata"}
-          columns={questionHeader}
-          data={filteredData}
-          typeData={"question"}
-          fetchData={fetchData}
-        />
-      </div>
+      {isLoading ? (
+        <CommonProgress />
+      ) : (
+        <div className="pt-5">
+          {/* <CommonTable   columns={userHeader} data={filteredData} typeData={"user"} onDeleted={fetchData}/> */}
+          <ImageTable
+            id={"imagedata"}
+            columns={questionHeader}
+            data={filteredData}
+            typeData={"question"}
+            fetchData={fetchData}
+          />
+        </div>
+      )}
 
-      <AddQuestions open={open} onClose={handleClose} fetchData={fetchData}/>
+      <AddQuestions open={open} onClose={handleClose} fetchData={fetchData} />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import React from "react";
 
 
 const CommonModal = ({ selectedData,open,cid, onClose, typeData,onUpdate }) => {
-  // console.log("====> ", cid); 
+ 
   return (
     <>
       {/* {(() => {

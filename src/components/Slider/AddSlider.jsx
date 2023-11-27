@@ -72,7 +72,6 @@ const AddSlider = ({ open, onClose, data, fetchData }) => {
      formData.append("link", values.link);
      formData.append("text", values.text);
      const response = await SliderService.updateSlider(data?._id,formData);
-     console.log(response);
      toast.success("Update Successfully");
      fetchData(); 
      onClose(); 

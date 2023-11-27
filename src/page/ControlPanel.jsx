@@ -1,24 +1,18 @@
 //External Import
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Breadcrumbs,
-  Stack,
-} from "@mui/material";
+import { Box, Breadcrumbs, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { LoadingButton } from "@mui/lab";
 import { CSVLink } from "react-csv";
-import { debounce } from "lodash";
 
-import jsPDF from 'jspdf'
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 //Internal Import
 import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 import CommonTable from "../components/common/CommonTable";
 
-import CustomSearchField from "../components/common/SearchField";
 import PackageButton from "../components/common/PackageButton";
 import { MdSaveAlt } from "react-icons/md";
 
@@ -26,11 +20,11 @@ import csvCategoryheaders from "../constants/categoryHeaders";
 import AddPanelModal from "../components/controlpanel/AddPanel";
 import controlHeader from "../constants/controlpanel";
 import ControlPanelService from "../service/ControlPanelService";
+import { CommonProgress } from "../components/common/CommonProgress";
 
 const ControlPanel = () => {
   const [data, setData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleClick = () => {};
   // Fetch User Data
   useEffect(() => {
@@ -38,28 +32,22 @@ const ControlPanel = () => {
   }, []);
 
   const fetchData = async () => {
+    setIsLoading(true);
     const res = await ControlPanelService.getControl();
-    console.log("Response", res.data);
     setData(res?.data);
+    setIsLoading(false);
   };
-  // const handleSearchQueryChange = debounce((query) => {
-  //   setSearchQuery(query);
-  // }, 500);
 
-  // const filteredData = data?.filter(
-  //   (control) =>
-  //   control.title.toLowerCase() 
-  // );
   const [open, setOpen] = React.useState(false);
-  
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
- 
-  const handleDownloadPDF = ()=>{
-    const pdf = new jsPDF(); 
-    pdf.autoTable({html:'#HomeSettings'});
-    pdf.save("HomeSettings.pdf")
-  }
+
+  const handleDownloadPDF = () => {
+    const pdf = new jsPDF();
+    pdf.autoTable({ html: "#HomeSettings" });
+    pdf.save("HomeSettings.pdf");
+  };
   return (
     <div>
       <PackageBreadcrumb>
@@ -85,11 +73,6 @@ const ControlPanel = () => {
         }}
         justifyContent={"space-between"}
       >
-        {/* Search Box  */}
-        {/* <CustomSearchField
-          name={"Search by title or subtitle"}
-          // onChange={handleSearchQueryChange}
-        /> */}
         <Box
           sx={{
             display: "flex",
@@ -97,39 +80,39 @@ const ControlPanel = () => {
             justifyContent: "space-between",
           }}
         >
-         <Box>
-         <CSVLink
-            data={data}
-            headers={csvCategoryheaders}
-            filename="Control.csv"
-          >
+          <Box>
+            <CSVLink
+              data={data}
+              headers={csvCategoryheaders}
+              filename="Control.csv"
+            >
+              <LoadingButton
+                sx={{
+                  height: "30px",
+                  width: "75px",
+                  mt: { lg: "6px", md: "6px" },
+                  ml: { lg: "10px", md: "6px" },
+                  alignContent: "left",
+                  textAlign: "left",
+                }}
+                size="small"
+                color="secondary"
+                onClick={handleClick}
+                // loading={loading}
+                loadingPosition="start"
+                startIcon={<MdSaveAlt size={25} />}
+                variant="contained"
+                disabled={data ? false : true}
+              >
+                <span>csv</span>
+              </LoadingButton>
+            </CSVLink>
             <LoadingButton
               sx={{
                 height: "30px",
                 width: "75px",
                 mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px" },
-                alignContent: "left",
-                textAlign: "left",
-              }}
-              size="small"
-              color="secondary"
-              onClick={handleClick}
-              // loading={loading}
-              loadingPosition="start"
-              startIcon={<MdSaveAlt size={25} />}
-              variant="contained"
-              disabled={data ? false : true}
-            >
-              <span>csv</span>
-            </LoadingButton>
-          </CSVLink>
-          <LoadingButton
-              sx={{
-                height: "30px",
-                width: "75px",
-                mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px",sm:"4px" },
+                ml: { lg: "10px", md: "6px", sm: "4px" },
                 alignContent: "left",
                 textAlign: "left",
               }}
@@ -144,54 +127,44 @@ const ControlPanel = () => {
             >
               <span>pdf</span>
             </LoadingButton>
-         </Box>
-          {/* Add Button  */}
-          {data?.some(item => item.status > 1) ? null : (
-          <Box
-            sx={{
-              alignContent: "right",
-              textAlign: "right",
-              marginBottom: "10px",
-            }}
-            onClick={handleOpen}
-          >
-            <PackageButton
-              color={"green"}
-              text={"+ Add"}
-              variant={"contained"}
-            />
           </Box>
-        )}
-          {/* <Box
-            sx={{
-              alignContent: "right",
-              textAlign: "right",
-              marginBottom: "10px",
-            }}
-            onClick={handleOpen}
-          >
-            <PackageButton
-              color={"green"}
-              text={"+ Add"}
-              variant={"contained"}
-            />
-          </Box> */}
+          {/* Add Button  */}
+          {data?.length >= 2 ? (
+            ""
+          ) : (
+            <Box
+              sx={{
+                alignContent: "right",
+                textAlign: "right",
+                marginBottom: "10px",
+              }}
+              onClick={handleOpen}
+            >
+              <PackageButton
+                color={"green"}
+                text={"+ Add"}
+                variant={"contained"}
+              />
+            </Box>
+          )}
         </Box>
       </Stack>
-      <div className="pt-5">
-        <CommonTable
-          id={"control"}
-          columns={controlHeader}
-          data={data}
-          typeData={"control"}
-          fetchData={fetchData}
-          haveimage={"true"}
-        />
-      </div>
+      {isLoading ? (
+        <CommonProgress />
+      ) : (
+        <div className="pt-5">
+          <CommonTable
+            id={"control"}
+            columns={controlHeader}
+            data={data}
+            typeData={"control"}
+            fetchData={fetchData}
+            haveimage={"true"}
+          />
+        </div>
+      )}
 
-       <AddPanelModal  open={open} onClose={handleClose} fetchData={fetchData} />
-      
-      
+      <AddPanelModal open={open} onClose={handleClose} fetchData={fetchData} />
     </div>
   );
 };

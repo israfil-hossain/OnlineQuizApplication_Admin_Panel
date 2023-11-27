@@ -16,12 +16,13 @@ import { MdSaveAlt } from "react-icons/md";
 import csvUserheaders from "../constants/csvUserheaders";
 import UserService from "../service/UserService";
 import AddUser from "../components/Users/AddUser";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable'; 
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { CommonProgress } from "../components/common/CommonProgress";
 const User = () => {
- 
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -34,9 +35,10 @@ const User = () => {
   }, []);
 
   const fetchData = async () => {
+    setIsLoading(true);
     const res = await UserService.getUsers();
-    console.log("User==>", res.data);
     setData(res.data);
+    setIsLoading(false);
   };
   const handleSearchQueryChange = debounce((query) => {
     setSearchQuery(query);
@@ -46,11 +48,11 @@ const User = () => {
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const handleDownloadPDF = ()=>{
-    const pdf = new jsPDF(); 
-    pdf.autoTable({html:'#user'});
-    pdf.save("usersdata.pdf")
-  }
+  const handleDownloadPDF = () => {
+    const pdf = new jsPDF();
+    pdf.autoTable({ html: "#user" });
+    pdf.save("usersdata.pdf");
+  };
 
   return (
     <div>
@@ -89,35 +91,39 @@ const User = () => {
             justifyContent: "space-between",
           }}
         >
-         <Box>
-         <CSVLink data={data} headers={csvUserheaders} filename="Userdata.csv">
+          <Box>
+            <CSVLink
+              data={data}
+              headers={csvUserheaders}
+              filename="Userdata.csv"
+            >
+              <LoadingButton
+                sx={{
+                  height: "30px",
+                  width: "75px",
+                  mt: { lg: "6px", md: "6px" },
+                  ml: { lg: "10px", md: "6px" },
+                  alignContent: "left",
+                  textAlign: "left",
+                }}
+                size="small"
+                color="secondary"
+                onClick={handleClick}
+                // loading={loading}
+                loadingPosition="start"
+                startIcon={<MdSaveAlt size={25} />}
+                variant="contained"
+                disabled={data ? false : true}
+              >
+                <span>csv</span>
+              </LoadingButton>
+            </CSVLink>
             <LoadingButton
               sx={{
                 height: "30px",
                 width: "75px",
                 mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px" },
-                alignContent: "left",
-                textAlign: "left",
-              }}
-              size="small"
-              color="secondary"
-              onClick={handleClick}
-              // loading={loading}
-              loadingPosition="start"
-              startIcon={<MdSaveAlt size={25} />}
-              variant="contained"
-              disabled={data ? false : true}
-            >
-              <span>csv</span>
-            </LoadingButton>
-          </CSVLink>
-          <LoadingButton
-              sx={{
-                height: "30px",
-                width: "75px",
-                mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px",sm:"4px" },
+                ml: { lg: "10px", md: "6px", sm: "4px" },
                 alignContent: "left",
                 textAlign: "left",
               }}
@@ -132,7 +138,7 @@ const User = () => {
             >
               <span>pdf</span>
             </LoadingButton>
-         </Box>
+          </Box>
           {/* Add Button  */}
           <Box
             sx={{
@@ -146,21 +152,24 @@ const User = () => {
               color={"green"}
               text={"+ Add"}
               variant={"contained"}
-             
             />
           </Box>
         </Box>
       </Stack>
-      <div className="pt-5">
-        <CommonTable
-          id={'user'}
-          columns={userHeader}
-          data={filteredData}
-          typeData={"user"}
-          fetchData={fetchData}
-          haveimage={"true"}
-        />
-      </div>
+      {isLoading ? (
+        <CommonProgress />
+      ) : (
+        <div className="pt-5">
+          <CommonTable
+            id={"user"}
+            columns={userHeader}
+            data={filteredData}
+            typeData={"user"}
+            fetchData={fetchData}
+            haveimage={"true"}
+          />
+        </div>
+      )}
       <AddUser open={open} onClose={handleClose} fetchData={fetchData} />
     </div>
   );

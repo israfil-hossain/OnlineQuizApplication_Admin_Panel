@@ -11,45 +11,46 @@ import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 import CustomSearchField from "../components/common/SearchField";
 import { MdSaveAlt } from "react-icons/md";
 
-
 import { BsSliders } from "react-icons/bs";
 
-import jsPDF from 'jspdf'
-import 'jspdf-autotable';
-
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 import csvImageheaders from "../constants/imageHeaders";
 import resultHeader from "../constants/resultHeaders";
 import QuestionService from "../service/QuestionService";
 import CommonTable from "../components/common/CommonTable";
+import { CommonProgress } from "../components/common/CommonProgress";
 
 const Results = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleClick = () => {};
   // Fetch User Data
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async () => { 
+  const fetchData = async () => {
+    setIsLoading(true);
     const res = await QuestionService.getAllResult();
     setData(res.data);
+    setIsLoading(false);
   };
   const handleSearchQueryChange = debounce((query) => {
     setSearchQuery(query);
   }, 500);
   const filteredData = data.filter((result) =>
-  result.quizName.toLowerCase().includes(searchQuery.toLowerCase())
+    result.quizName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-
-  const handleDownloadPDF = ()=>{
-    const pdf = new jsPDF(); 
-    pdf.autoTable({html:'#resultdata'});
-    pdf.save("imageData.pdf")
-  }
+  const handleDownloadPDF = () => {
+    const pdf = new jsPDF();
+    pdf.autoTable({ html: "#resultdata" });
+    pdf.save("imageData.pdf");
+  };
   return (
     <div>
       <PackageBreadcrumb>
@@ -84,35 +85,39 @@ const Results = () => {
             justifyContent: "space-between",
           }}
         >
-         <Box>
-         <CSVLink data={data} headers={csvImageheaders} filename="Imagedata.csv">
+          <Box>
+            <CSVLink
+              data={data}
+              headers={csvImageheaders}
+              filename="Imagedata.csv"
+            >
+              <LoadingButton
+                sx={{
+                  height: "30px",
+                  width: "75px",
+                  mt: { lg: "6px", md: "6px" },
+                  ml: { lg: "10px", md: "6px" },
+                  alignContent: "left",
+                  textAlign: "left",
+                }}
+                size="small"
+                color="secondary"
+                onClick={handleClick}
+                // loading={loading}
+                loadingPosition="start"
+                startIcon={<MdSaveAlt size={25} />}
+                variant="contained"
+                disabled={data ? false : true}
+              >
+                <span>csv</span>
+              </LoadingButton>
+            </CSVLink>
             <LoadingButton
               sx={{
                 height: "30px",
                 width: "75px",
                 mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px" },
-                alignContent: "left",
-                textAlign: "left",
-              }}
-              size="small"
-              color="secondary"
-              onClick={handleClick}
-              // loading={loading}
-              loadingPosition="start"
-              startIcon={<MdSaveAlt size={25} />}
-              variant="contained"
-              disabled={data ? false : true}
-            >
-              <span>csv</span>
-            </LoadingButton>
-          </CSVLink>
-          <LoadingButton
-              sx={{
-                height: "30px",
-                width: "75px",
-                mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px",sm:"4px" },
+                ml: { lg: "10px", md: "6px", sm: "4px" },
                 alignContent: "left",
                 textAlign: "left",
               }}
@@ -127,22 +132,23 @@ const Results = () => {
             >
               <span>pdf</span>
             </LoadingButton>
-         </Box>
+          </Box>
           {/* Add Button  */}
-          
         </Box>
       </Stack>
-      <div className="pt-5">
-        {/* <CommonTable   columns={userHeader} data={filteredData} typeData={"user"} onDeleted={fetchData}/> */}
-        <CommonTable
-          id={"resultdata"}
-          columns={resultHeader}
-          data={filteredData}
-          typeData={"result"}
-          fetchData={fetchData}
-     
-        />
-      </div>
+      {isLoading ? (
+        <CommonProgress />
+      ) : (
+        <div className="pt-5">
+          <CommonTable
+            id={"resultdata"}
+            columns={resultHeader}
+            data={filteredData}
+            typeData={"result"}
+            fetchData={fetchData}
+          />
+        </div>
+      )}
     </div>
   );
 };

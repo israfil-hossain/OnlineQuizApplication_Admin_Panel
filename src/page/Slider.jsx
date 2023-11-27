@@ -6,8 +6,8 @@ import { LoadingButton } from "@mui/lab";
 import { CSVLink } from "react-csv";
 import { debounce } from "lodash";
 
-import jsPDF from 'jspdf'
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 //Internal Import
 import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
@@ -20,11 +20,13 @@ import sliderHeader from "../constants/slider";
 import AddSlider from "../components/Slider/AddSlider";
 import SliderTable from "../components/common/SliderTable";
 import csvSliderHeader from "../constants/csvSliderHeaders";
+import { CommonProgress } from "../components/common/CommonProgress";
 
 const Slider = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleClick = () => {};
   // Fetch User Data
   useEffect(() => {
@@ -32,8 +34,10 @@ const Slider = () => {
   }, []);
 
   const fetchData = async () => {
+    setIsLoading(true);
     const res = await SliderService.getSlider();
     setData(res.data);
+    setIsLoading(false);
   };
   const handleSearchQueryChange = debounce((query) => {
     setSearchQuery(query);
@@ -42,15 +46,15 @@ const Slider = () => {
     slider.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const [open,setOpen] = useState(false);
-  const handleOpen=()=>setOpen(true);
-  const handleClose = ()=>setOpen(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  const handleDownloadPDF = ()=>{
-    const pdf = new jsPDF(); 
-    pdf.autoTable({html:'#slidertable'});
-    pdf.save("SliderData.pdf")
-  }
+  const handleDownloadPDF = () => {
+    const pdf = new jsPDF();
+    pdf.autoTable({ html: "#slidertable" });
+    pdf.save("SliderData.pdf");
+  };
   return (
     <div>
       <PackageBreadcrumb>
@@ -86,34 +90,38 @@ const Slider = () => {
           }}
         >
           <Box>
-          <CSVLink data={data} headers={csvSliderHeader} filename="Sliderdata.csv">
+            <CSVLink
+              data={data}
+              headers={csvSliderHeader}
+              filename="Sliderdata.csv"
+            >
+              <LoadingButton
+                sx={{
+                  height: "30px",
+                  width: "75px",
+                  mt: { lg: "6px", md: "6px" },
+                  ml: { lg: "10px", md: "6px" },
+                  alignContent: "left",
+                  textAlign: "left",
+                }}
+                size="small"
+                color="secondary"
+                onClick={handleClick}
+                // loading={loading}
+                loadingPosition="start"
+                startIcon={<MdSaveAlt size={25} />}
+                variant="contained"
+                disabled={data ? false : true}
+              >
+                <span>csv</span>
+              </LoadingButton>
+            </CSVLink>
             <LoadingButton
               sx={{
                 height: "30px",
                 width: "75px",
                 mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px" },
-                alignContent: "left",
-                textAlign: "left",
-              }}
-              size="small"
-              color="secondary"
-              onClick={handleClick}
-              // loading={loading}
-              loadingPosition="start"
-              startIcon={<MdSaveAlt size={25} />}
-              variant="contained"
-              disabled={data ? false : true}
-            >
-              <span>csv</span>
-            </LoadingButton>
-          </CSVLink>
-          <LoadingButton
-              sx={{
-                height: "30px",
-                width: "75px",
-                mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px",sm:"4px" },
+                ml: { lg: "10px", md: "6px", sm: "4px" },
                 alignContent: "left",
                 textAlign: "left",
               }}
@@ -146,17 +154,21 @@ const Slider = () => {
           </Box>
         </Box>
       </Stack>
-      <div className="pt-5">
-        <SliderTable 
+      {isLoading ? (
+        <CommonProgress />
+      ) : (
+        <div className="pt-5">
+          <SliderTable
             id={"slidertable"}
             columns={sliderHeader}
             data={filteredData}
             typeData={"slider"}
             fetchData={fetchData}
-        />
-      </div>
+          />
+        </div>
+      )}
 
-      <AddSlider open={open} onClose={handleClose} fetchData={fetchData}/>
+      <AddSlider open={open} onClose={handleClose} fetchData={fetchData} />
     </div>
   );
 };

@@ -1,18 +1,14 @@
 //External Import
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Breadcrumbs,
-  Stack,
-} from "@mui/material";
+import { Box, Breadcrumbs, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { LoadingButton } from "@mui/lab";
 import { CSVLink } from "react-csv";
 import { debounce } from "lodash";
 
-import jsPDF from 'jspdf'
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 //Internal Import
 import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
@@ -25,10 +21,12 @@ import { MdSaveAlt } from "react-icons/md";
 import CategoryService from "../service/CategoryService";
 import csvCategoryheaders from "../constants/categoryHeaders";
 import AddCategoryModal from "../components/Category/AddCategory";
+import { CommonProgress } from "../components/common/CommonProgress";
 
 const Category = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {};
   // Fetch User Data
@@ -37,9 +35,10 @@ const Category = () => {
   }, []);
 
   const fetchData = async () => {
+    setIsLoading(true);
     const res = await CategoryService.getCategory();
     setData(res?.data);
-    console.log("Cate ==>", res.data)
+    setIsLoading(false);
   };
   const handleSearchQueryChange = debounce((query) => {
     setSearchQuery(query);
@@ -51,15 +50,15 @@ const Category = () => {
       user.cat_status.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const [open, setOpen] = React.useState(false);
-  
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
- 
-  const handleDownloadPDF = ()=>{
-    const pdf = new jsPDF(); 
-    pdf.autoTable({html:'#category'});
-    pdf.save("Category.pdf")
-  }
+
+  const handleDownloadPDF = () => {
+    const pdf = new jsPDF();
+    pdf.autoTable({ html: "#category" });
+    pdf.save("Category.pdf");
+  };
   return (
     <div>
       <PackageBreadcrumb>
@@ -97,39 +96,39 @@ const Category = () => {
             justifyContent: "space-between",
           }}
         >
-         <Box>
-         <CSVLink
-            data={data}
-            headers={csvCategoryheaders}
-            filename="Category.csv"
-          >
+          <Box>
+            <CSVLink
+              data={data}
+              headers={csvCategoryheaders}
+              filename="Category.csv"
+            >
+              <LoadingButton
+                sx={{
+                  height: "30px",
+                  width: "75px",
+                  mt: { lg: "6px", md: "6px" },
+                  ml: { lg: "10px", md: "6px" },
+                  alignContent: "left",
+                  textAlign: "left",
+                }}
+                size="small"
+                color="secondary"
+                onClick={handleClick}
+                // loading={loading}
+                loadingPosition="start"
+                startIcon={<MdSaveAlt size={25} />}
+                variant="contained"
+                disabled={data ? false : true}
+              >
+                <span>csv</span>
+              </LoadingButton>
+            </CSVLink>
             <LoadingButton
               sx={{
                 height: "30px",
                 width: "75px",
                 mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px" },
-                alignContent: "left",
-                textAlign: "left",
-              }}
-              size="small"
-              color="secondary"
-              onClick={handleClick}
-              // loading={loading}
-              loadingPosition="start"
-              startIcon={<MdSaveAlt size={25} />}
-              variant="contained"
-              disabled={data ? false : true}
-            >
-              <span>csv</span>
-            </LoadingButton>
-          </CSVLink>
-          <LoadingButton
-              sx={{
-                height: "30px",
-                width: "75px",
-                mt: { lg: "6px", md: "6px" },
-                ml: { lg: "10px", md: "6px",sm:"4px" },
+                ml: { lg: "10px", md: "6px", sm: "4px" },
                 alignContent: "left",
                 textAlign: "left",
               }}
@@ -144,7 +143,7 @@ const Category = () => {
             >
               <span>pdf</span>
             </LoadingButton>
-         </Box>
+          </Box>
           {/* Add Button  */}
           <Box
             sx={{
@@ -162,20 +161,26 @@ const Category = () => {
           </Box>
         </Box>
       </Stack>
-      <div className="pt-5">
-        <CommonTable
-          id={"category"}
-          columns={categoryHeader}
-          data={filteredData}
-          typeData={"category"}
-          fetchData={fetchData}
-          haveimage={"true"}
-        />
-      </div>
+      {isLoading ? (
+        <CommonProgress />
+      ) : (
+        <div className="pt-5">
+          <CommonTable
+            id={"category"}
+            columns={categoryHeader}
+            data={filteredData}
+            typeData={"category"}
+            fetchData={fetchData}
+            haveimage={"true"}
+          />
+        </div>
+      )}
 
-       <AddCategoryModal  open={open} onClose={handleClose} fetchData={fetchData} />
-      
-      
+      <AddCategoryModal
+        open={open}
+        onClose={handleClose}
+        fetchData={fetchData}
+      />
     </div>
   );
 };

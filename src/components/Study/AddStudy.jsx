@@ -1,9 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-
-// import { Editor } from 'react-draft-wysiwyg';
-// import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { Editor } from "@tinymce/tinymce-react";
 
 import {
   Backdrop,
@@ -23,13 +19,14 @@ import { Progress } from "../common/Progress";
 
 import studyValidationSchema from "../../utils/validation/studyValidation";
 import StudyService from "../../service/StudyService";
+import CommonEditor from "../common/CommonEditor";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%,-50%)",
-  width: ["90%", "90%", "60%"],
+  width: ["80%"],
   bgcolor: "background.paper",
   border: "2px solid #F7FDFF",
   borderRadius: "10px",
@@ -40,8 +37,8 @@ const style = {
 };
 
 const AddStudy = ({ open, onClose, data, fetchData }) => {
-  const editorRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(data ? data?.image : "");
+  const [editorContent,setEditorContent] = useState(data ? data?.text1 : "")
   const handleResetAndClose = (resetForm) => {
     fetchData();
     onClose();
@@ -49,28 +46,25 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
     setPreviewImage("");
   };
   const [isLoading, setIsLoading] = useState(false);
-  
-
-  // const log = () => {
-  //   if (editorRef.current) {
-  //     console.log(editorRef.current.getContent());
-  //   }
-  // };
 
   const handleSubmit = async (values, { setSubmitting }) => {
+   
     try {
      
       setIsLoading(true);
+      let datas = {
+        ...values, text1: editorContent,
+      }
 
-      const response = await StudyService.addStudy(values);
+      const response = await StudyService.addStudy(datas);
 
 
       if (response.status === 201) {
-        toast.success("Question created successfully");
+        toast.success("Study created successfully");
         fetchData();
         onClose();
       } else if (response.status === 200) {
-        toast.success("Question created successfully");
+        toast.success("Study created successfully");
         fetchData();
         onClose();
       } else {
@@ -88,18 +82,19 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
     try {
       setIsLoading(true);
 
-      const response = await StudyService.updateStudy(data?._id, values);
+
+      const response = await StudyService.updateStudy(data?._id, {...values,text1: editorContent});
 
       if (response.status === 200) {
-        toast.success("Question updated successfully");
+        toast.success("Study updated successfully !");
         fetchData();
         onClose();
       } else {
-        toast.error("Something went wrong while updating the question");
+        toast.error("Something went wrong while updating the Study");
       }
     } catch (error) {
-      console.log("Error while updating question: ", error);
-      toast.error("Something went wrong while updating the question");
+      console.log("Error while updating Study: ", error);
+      toast.error("Something went wrong while updating the Study !");
     } finally {
       setIsLoading(false);
       setSubmitting(false);
@@ -124,16 +119,15 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
         <Box sx={style}>
           <Formik
             initialValues={{
-              image: data ? data.image : "",
+              image: data ? data?.image : "",
               study_name: data ? data?.study_name : "",
               study_title: data ? data?.study_title : "",
-              text1: data ? data?.text1 : "",
               study_description: data ? data?.study_description : "",
               status: data ? data?.status : "active",
               link: data ? data?.link : "",
             }}
             validationSchema={studyValidationSchema}
-            onSubmit={data ? handleUpdate : handleSubmit}
+            onSubmit={data && data?.length > 0 ? handleUpdate : handleSubmit}
           >
             {({
               values,
@@ -156,7 +150,7 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
                   }}
                 >
                   <Typography variant="h5" component="h5">
-                    {data ? "Update " : "Add "} Study
+                    {data && data?.length > 0 ? "Update " : "Add "} Study
                   </Typography>
                   <div style={{}}>
                     <IconButton
@@ -197,7 +191,6 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
                                         ? "border-red-500"
                                         : ""
                                     }`}
-                          //   className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                         {touched.study_name && errors.study_name && (
                           <p className="mt-2 text-sm text-red-600 ">
@@ -319,78 +312,15 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
                     </div>
 
                     {/* Text 1  */}
-                    <div className="my-4 rounded-md">
-                      <div className="mb-4 items-center justify-center border px-4 py-2">
-                        
-                        <Field name="text1">
-                          {({ field }) => (
-                            <Editor
-                              onInit={(evt, editor) =>
-                                (editorRef.current = editor)
-                              }
-                              value={
-                                field.value
-                                  ? field.value
-                                  : "Please enter your text here"
-                              }
-                              init={{
-                                height: 500,
-                                menubar: true,
-                                plugins: [
-                                  "advlist autolink lists link image charmap print preview anchor",
-                                  "searchreplace visualblocks code fullscreen",
-                                  "insertdatetime media table paste code help wordcount",
-                                  "heading", // Added 'heading' plugin for headings
-                                  "fontsize" // Added 'fontsize' plugin for font size options
-                                ],
-                                toolbar:
-                                  "undo redo | formatselect | " +
-                                  "bold italic backcolor | alignleft aligncenter " +
-                                  "alignright alignjustify | bullist numlist outdent indent | " +
-                                  "removeformat | help | heading | fontsizeselect", // Added 'heading' and 'fontsizeselect' to the toolbar
-                                content_style:
-                                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }", // Updated font family and size
-                                
-                              }}
-                              onEditorChange={(content, editor) => {
-                                // Update the form's field value
-                                field.onChange(field.name)(content);
-                              }}
-                            />
-                          )}
-                        </Field>
+                    <div className="my-4 ">
+                      <div className="mb-4 items-center justify-center   py-2">
+                      <CommonEditor
+                        editorData={editorContent}
+                        setEditorData={setEditorContent}
+                      />
                       </div>
                     </div>
-                    {/* <div className="my-4 rounded-md">
-                      <div className="mb-4   items-center justify-center">
-                        <label
-                          htmlFor="text1"
-                          className="block text-gray-800   mb-2"
-                        >
-                          Write Text - 01
-                        </label>
-
-                        <Field
-                          component="textarea"
-                          name="text1"
-                          error={touched.text1 && errors.text1}
-                          className={`appearance-none block w-full px-3 py-3 border border-gray-300 
-                                  rounded-md shadow-sm placeholder-gray-400 
-                                  focus:ring-green-500 focus:border-green-500 focus:ring-1 sm:text-sm ${
-                                    touched.text1 && errors.text1
-                                      ? "border-red-500"
-                                      : ""
-                                  }`}
-                          //   className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        />
-                        {touched.text1 && errors.text1 && (
-                          <p className="mt-2 text-sm text-red-600 ">
-                            {errors.text1}
-                          </p>
-                        )}
-                      </div>
-                    </div> */}
-
+                    
                   
 
                     {/* Description ...... */}

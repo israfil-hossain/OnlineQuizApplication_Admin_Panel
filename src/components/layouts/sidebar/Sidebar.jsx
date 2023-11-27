@@ -8,7 +8,11 @@ import { MenuContext } from "../../../context/MenuContext";
 
 // * React icons
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { AiFillTrophy, AiOutlineAppstore, AiOutlineControl } from "react-icons/ai";
+import {
+  AiFillTrophy,
+  AiOutlineAppstore,
+  AiOutlineControl,
+} from "react-icons/ai";
 import { BsPerson, BsQuestionDiamondFill, BsSliders } from "react-icons/bs";
 import { BiCategoryAlt } from "react-icons/bi";
 import { GiBlackBook } from "react-icons/gi";
@@ -114,16 +118,20 @@ const Sidebar = () => {
                 Category
               </NavLink>
             </li>
-            <li>
-              <NavLink to={"/controlpanel"} className="link text-gray-200">
-                <AiOutlineControl size={23} className="min-w-max text-gray-200" />
-                Control Panel
-              </NavLink>
-            </li>
+
             <li>
               <NavLink to={"/slider"} className="link text-gray-200">
                 <BsSliders size={23} className="min-w-max text-gray-200" />
                 Slider
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to={"/controlpanel"} className="link text-gray-200">
+                <AiOutlineControl
+                  size={23}
+                  className="min-w-max text-gray-200"
+                />
+                Control Panel
               </NavLink>
             </li>
             <li>

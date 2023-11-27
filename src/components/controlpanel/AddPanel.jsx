@@ -10,80 +10,37 @@ import panelValidationSchema from "../../utils/validation/panelValidation";
 import { toast } from "react-toastify";
 import { Progress } from "../common/Progress";
 import ControlPanelService from "../../service/ControlPanelService";
+import CommonEditor from "../common/CommonEditor";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%,-50%)",
-  width: ["500px"],
+  width: ["70%"],
+  maxHeight: "90vh",
+  overflow: "auto",
   bgcolor: "background.paper",
   border: "2px solid #F7FDFF",
   borderRadius: "10px",
   boxShadow: `3px 2px 3px 1px rgba(0, 0, 0, 0.2)`,
+  overflowY: "auto",
   p: 4,
 };
 
 const AddPanelModal = ({ open, onClose, data, fetchData }) => {
+  const [editorContent, setEditorContent] = useState(
+    data ? data?.text?.toString() : ""
+  );
   const [previewBanner, setPreviewBanner] = useState(data ? data.image : "");
+
   const handleResetAndClose = (resetForm) => {
     fetchData();
     onClose();
     resetForm();
-    setPreviewBanner("")
+    setPreviewBanner("");
   };
   const [isLoading, setIsLoading] = useState(false);
-  
-  // Add Data
-  // const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-  //   console.log("====>values", values);
-  //   try {
-  //     //api call
-  //     setIsLoading(true);
-  //     const response = await ControlPanelService.addControl(values);
-  //     // console.log("object :>> ", response);
-  //     console.log("Status Code : ", response.status);
-  //     if (response.status === 200) {
-  //       const responseData = response.data;
-  //       if (responseData.error) {
-  //         toast.error(responseData.error.message);
-  //         const errorData = responseData.error;
-  //         if (errorData.errors) {
-  //           const errors = Object.keys(errorData.errors).reduce((acc, key) => {
-  //             acc[key] = errorData.errors[key].msg;
-  //             return acc;
-  //           }, {});
-  //           console.log(errors);
-  //           setErrors(errors);
-  //         }
-  //       } else {
-  //         toast.success("Successfully Add Control Settings ");
-  //         onClose(true);
-  //         fetchData();
-  //       }
-  //       setSubmitting(false);
-  //     }
-  //   } catch (err) {
-  //     if (err.response) {
-  //       const errorData = err.response.data;
-  //       toast.error(errorData.message);
-  //       if (errorData.errors) {
-  //         const errors = Object.keys(errorData.errors).reduce((acc, key) => {
-  //           acc[key] = errorData.errors[key].msg;
-  //           return acc;
-  //         }, {});
-  //         console.log(errors);
-  //         setErrors(errors);
-  //       } else {
-  //         toast.error("Something went wrong");
-  //       }
-  //     } else {
-  //       toast.error("Something went wrong");
-  //     }
-  //   }
-  //   setIsLoading(false);
-  //   setSubmitting(false);
-  // };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -94,23 +51,23 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
       formData.append("link", values.link);
       formData.append("title", values.title);
       formData.append("subtitle", values.subtitle);
+      formData.append("text", editorContent);
+      formData.append("buttonName", values.buttonName);
       await ControlPanelService.addControl(formData);
       toast.success("Add Successfully");
-      fetchData(); 
+      fetchData();
       setPreviewBanner(null);
-      onClose(); 
-
+      onClose();
     } catch (error) {
-      toast.error("Something went wrong uploading "); 
+      toast.error("Something went wrong uploading ");
       console.log(error);
     }
-    setIsLoading(false); 
+    setIsLoading(false);
     setSubmitting(false);
   };
 
   // Update Data
   const handleUpdate = async (values, { setSubmitting, setErrors }) => {
-    // console.log("Values ", values);
     try {
       setIsLoading(true);
       const formData = new FormData();
@@ -119,17 +76,18 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
       formData.append("link", values.link);
       formData.append("title", values.title);
       formData.append("subtitle", values.subtitle);
-      await ControlPanelService.updateControl(data?._id,formData);
+      formData.append("text", editorContent);
+      formData.append("buttonName", values.buttonName);
+      await ControlPanelService.updateControl(data?._id, formData);
       toast.success("Update Successfully");
-      fetchData(); 
+      fetchData();
       setPreviewBanner(null);
-      onClose(); 
-
+      onClose();
     } catch (error) {
-      toast.error("Something went wrong uploading "); 
+      toast.error("Something went wrong uploading ");
       console.log(error);
     }
-    setIsLoading(false); 
+    setIsLoading(false);
     setSubmitting(false);
   };
 
@@ -157,10 +115,11 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
             initialValues={{
               title: data ? data.title : "",
               subtitle: data ? data.subtitle : "",
-              link: data ? data.link :"",
+              link: data ? data.link : "",
               status: data ? data.status : "inactive",
               image: data ? data?.image : "",
-
+              text: data ? data?.text : editorContent,
+              buttonName : data ? data?.buttonName : '',
             }}
             validationSchema={panelValidationSchema}
             onSubmit={data ? handleUpdate : handleSubmit}
@@ -174,7 +133,6 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
               isSubmitting,
               setFieldValue,
               handleBlur,
-             
             }) => (
               <Form>
                 {/* <>{JSON.stringify(values)}</> */}
@@ -204,8 +162,8 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
                 <Divider sx={{ mb: 2 }}>
                   <Chip label="Control Panel" />
                 </Divider>
-                <div className="space-y-6 mx-auto max-w-md">
-                <div className="my-4 rounded-md">
+                <div className="space-y-6 mx-auto ">
+                  <div className="my-4 rounded-md">
                     <label htmlFor="Banner">Banner</label>
                     <div className="mt-1 flex border flex-col justify-center items-center space-x-2 p-10 bg-white rounded-md h-100vh">
                       {previewBanner ? (
@@ -248,7 +206,7 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
                       htmlFor="Panel"
                       className="block text-sm font-medium text-gray-700"
                     >
-                     ControlPanel
+                      ControlPanel
                     </label>
                     <Field
                       type="text"
@@ -269,7 +227,15 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
                       component="div"
                       className="mt-2 text-sm text-red-600"
                     />
-                    <Field 
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="Panel"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      SubTitle
+                    </label>
+                    <Field
                       type="text"
                       name="subtitle"
                       id="subtitle"
@@ -288,26 +254,33 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
                       component="div"
                       className="mt-2 text-sm text-red-600"
                     />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="Panel"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Button Text
+                    </label>
                     <Field
                       type="text"
-                      name="link"
-                      id="link"
-                      placeholder="URL"
+                      name="buttonName"
+                      id="buttonName"
+                      placeholder="Button Text"
                       handleChange={handleChange}
-                      inputValue={values.link}
+                      inputValue={values.buttonName}
                       autoComplete="off"
                       className={`${inputClass} ${
-                        errors.link && touched.link
-                          ? "border-red-500"
-                          : ""
+                        errors.link && touched.link ? "border-red-500" : ""
                       }`}
                     />
                     <ErrorMessage
-                      name="link"
+                      name="buttonName"
                       component="div"
                       className="mt-2 text-sm text-red-600"
                     />
                   </div>
+
                   <div className="flex items-center space-x-2">
                     <label className="block text-sm font-medium text-gray-700">
                       Status
@@ -335,6 +308,12 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
                       {values.status === "active" ? "Active" : "Inactive"}
                     </label>
                   </div>
+
+                  <CommonEditor
+                    editorData={editorContent}
+                    setEditorData={setEditorContent}
+                  />
+
                   <button
                     type="submit"
                     disabled={isSubmitting}

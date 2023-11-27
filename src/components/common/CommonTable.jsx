@@ -1,5 +1,4 @@
 import { MdEdit, MdVisibility, MdDelete } from "react-icons/md";
-import { useContext } from "react";
 
 import {
   Box,
@@ -36,6 +35,7 @@ import { deleteConfirmation } from "./deleteConfirmation";
 import ControlPanelService from "../../service/ControlPanelService";
 import ViewPanelModal from "../controlpanel/ViewPanel";
 import AddPanelModal from "../controlpanel/AddPanel";
+import { logo } from "../../assets/image";
 
 const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
   const [open, setOpen] = useState(false);
@@ -365,12 +365,13 @@ const CommonTable = ({ columns, data, typeData, fetchData, id, haveimage }) => {
                         }}
                       >
                         <img
-                          src={item?.image ? item?.image : item?.profile} // Assuming image URL is stored in the "image" property of the data object
+                          src={item?.image ? item?.image : item?.profile || logo} // Assuming image URL is stored in the "image" property of the data object
                           alt=""
                           style={{
                             width: "100%",
                             height: "100%",
                             objectFit: "contain",
+                            borderRadius: "10px" 
                           }} // Adjust styles as needed
                         />
                       </Box>

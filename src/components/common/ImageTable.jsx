@@ -21,13 +21,13 @@ import AddQuestions from "../Questions/AddQuestions";
 import ViewQuestions from "../Questions/ViewQuestions";
 import QuestionService from "../../service/QuestionService";
 import { deleteConfirmation } from "./deleteConfirmation";
+import { logo } from "../../assets/image";
 
 const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
-
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
   const [dataType, setDataType] = useState(null);
- 
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -49,20 +49,18 @@ const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
     }
   };
 
-  
-
   // For Image Deleted Function Call.....
   const handleQuestionDelete = async (id) => {
     try {
       const result = await deleteConfirmation();
       if (result.isConfirmed) {
-      const response = await QuestionService.deleteQuestion(id);
+        const response = await QuestionService.deleteQuestion(id);
 
-      if (response.status === 200) {
-        toast.success("Question Deleted Successfully !");
-        fetchData();
+        if (response.status === 200) {
+          toast.success("Question Deleted Successfully !");
+          fetchData();
+        }
       }
-    }
     } catch (err) {
       toast.error("Something went wrong !");
       console.log(err);
@@ -75,7 +73,7 @@ const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
       case "question":
         handleQuestionDelete(id);
         break;
-      
+
       default:
         return "Not Found !";
     }
@@ -89,7 +87,7 @@ const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
         setOpen(true);
         setSelectedData(item);
         break;
-      
+
       default:
         return "Not Found !";
     }
@@ -176,12 +174,14 @@ const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
                       }}
                     >
                       <img
-                        src={item?.image} // Assuming image URL is stored in the "image" property of the data object
-                        alt=""
+                        src={item?.image ? item?.image : logo}
+                        alt="quiz"
                         style={{
                           width: "100%",
                           height: "100%",
-                          objectFit: "contain",
+                          objectFit: "fill",
+                          borderRadius:"10px"
+                         
                         }} // Adjust styles as needed
                       />
                     </Box>
@@ -214,13 +214,16 @@ const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
                       {item?.qus_description}
                     </Typography>
                   </TableCell>
-                  
 
-                  <TableCell sx={{width:"200px"}}>
+                  <TableCell sx={{ width: "200px" }}>
                     <Stack
                       direction="row"
                       spacing={0}
-                      sx={{ textAlign: "center", justifyContent: "center",width:"200px" }}
+                      sx={{
+                        textAlign: "center",
+                        justifyContent: "center",
+                        width: "200px",
+                      }}
                     >
                       <div sx={{ ml: 10 }}>
                         <IconButton
@@ -262,8 +265,6 @@ const ImageTable = ({ id, columns, data, typeData, fetchData }) => {
 
       {(() => {
         switch (typeData) {
-         
-
           case "question":
             if (dataType === "question_edit") {
               return (
