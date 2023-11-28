@@ -37,6 +37,7 @@ const style = {
 };
 
 const AddStudy = ({ open, onClose, data, fetchData }) => {
+  console.log("Data", data);
   const [previewImage, setPreviewImage] = useState(data ? data?.image : "");
   const [editorContent,setEditorContent] = useState(data ? data?.text1 : "")
   const handleResetAndClose = (resetForm) => {
@@ -48,9 +49,7 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-   
     try {
-     
       setIsLoading(true);
       let datas = {
         ...values, text1: editorContent,
@@ -79,10 +78,9 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
     }
   };
   const handleUpdate = async (values, { setSubmitting }) => {
+    console.log("Click HandleUpdate")
     try {
       setIsLoading(true);
-
-
       const response = await StudyService.updateStudy(data?._id, {...values,text1: editorContent});
 
       if (response.status === 200) {
@@ -127,7 +125,7 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
               link: data ? data?.link : "",
             }}
             validationSchema={studyValidationSchema}
-            onSubmit={data && data?.length > 0 ? handleUpdate : handleSubmit}
+            onSubmit={data ? handleUpdate : handleSubmit}
           >
             {({
               values,
@@ -394,7 +392,7 @@ const AddStudy = ({ open, onClose, data, fetchData }) => {
                     disabled={isSubmitting}
                     className="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    {isLoading ? <Progress className="mr-2" /> : ""}
+                    {isLoading ? <Progress className="mr-2 px-4" /> : ""}
                     {data ? "Update" : "Submit"}
                   </button>
                 </div>
