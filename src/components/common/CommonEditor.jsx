@@ -50,7 +50,7 @@ const CommonEditor = ({ setEditorData, editorData }) => {
       config={{
         minHeight: 350,
         uploader: {
-          insertImageAsBase64URI: true
+        insertImageAsBase64URI: true
         }
       }}
       value={editorData}

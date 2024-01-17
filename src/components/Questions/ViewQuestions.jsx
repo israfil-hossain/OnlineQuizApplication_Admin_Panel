@@ -26,6 +26,7 @@ const style = {
   overflow: "auto",
 };
 const ViewQuestions = ({ open, onClose, data, fetchData }) => {
+  console.log("Option",data.options)
   const handleResetAndClose = () => {
     onClose();
   };
@@ -73,6 +74,9 @@ const ViewQuestions = ({ open, onClose, data, fetchData }) => {
             <Chip label="view question" />
           </Divider>
           <div className="space-y-6 mx-10 justify-center text-center">
+            
+            {
+              data?.image && 
             <div className="my-4 rounded-md">
               <label htmlFor="image">Image</label>
               <div className="mt-1 flex border flex-col justify-center items-center space-x-2 p-10 bg-white rounded-md h-100vh">
@@ -86,6 +90,7 @@ const ViewQuestions = ({ open, onClose, data, fetchData }) => {
                 </div>
               </div>
             </div>
+            }
 
             <div className="flex justify-between ">
               <div className="flex items-center space-x-2">
@@ -114,11 +119,11 @@ const ViewQuestions = ({ open, onClose, data, fetchData }) => {
                   Options Name :
                 </label>
                 <div className="lg:grid-cols-3 grid sm:grid-cols-2 gap-2">
-                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options?.option_a}</span>
-                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options?.option_b}</span>
-                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options?.option_c}</span>
-                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options?.option_d}</span>
-                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options?.option_e}</span>
+                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options[0]?.option_a}</span>
+                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options[0]?.option_b}</span>
+                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options[0]?.option_c}</span>
+                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options[0]?.option_d}</span>
+                    <span className="px-4 py-1 bg-amber-50  mr-2 rounded-md">{data?.options[0]?.option_e}</span>
                   
                 </div>
               </div>
