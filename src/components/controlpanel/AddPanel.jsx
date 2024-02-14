@@ -97,6 +97,7 @@ const AddPanelModal = ({ open, onClose, data, fetchData }) => {
 
   return (
     <Modal
+      disableEnforceFocus
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       open={open}
